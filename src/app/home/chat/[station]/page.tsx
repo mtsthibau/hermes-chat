@@ -25,6 +25,7 @@ export default function ChatScreen() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orig, setOrig] = useState("chat");
+  const [alias, setAlias] = useState<string | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,11 +48,22 @@ export default function ChatScreen() {
   }, [station, t]);
 
   useEffect(() => {
-    fetch("/api/config")
+    fetch("/api/sys")
       .then((r) => (r.ok ? r.json() : null))
       .then((cfg) => { if (cfg?.nodename) setOrig(cfg.nodename); })
       .catch(() => { });
   }, []);
+
+  useEffect(() => {
+    fetch("/api/stations")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((stations: { name: string; alias: string }[] | null) => {
+        if (!stations) return;
+        const match = stations.find((s) => s.name === station);
+        if (match?.alias) setAlias(match.alias);
+      })
+      .catch(() => { });
+  }, [station]);
 
   useEffect(() => {
     fetchMessages();
@@ -163,10 +175,11 @@ export default function ChatScreen() {
               く
             </Link>
             <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold uppercase shrink-0">
-              {station[0]}
+              {(alias ?? station)[0]}
             </div>
             <div className="min-w-0">
-              <p className="text-gray-900 dark:text-white font-semibold truncate">{station}</p>
+              <p className="text-gray-900 dark:text-white font-semibold truncate">{alias}</p>
+              {alias && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{station}</p>}
             </div>
           </div>
         }
@@ -207,7 +220,7 @@ export default function ChatScreen() {
                         ? "w-[90%] sm:w-[70%]"
                         : "max-w-[75%] sm:max-w-[60%]"
                     } rounded-2xl px-4 py-2 shadow ${isMine
-                      ? "bg-blue-900 text-white rounded-br-sm"
+                      ? "bg-gray-800 shadow text-white rounded-br-sm"
                       : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
                       }`}
                   >
