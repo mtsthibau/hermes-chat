@@ -33,13 +33,9 @@ export default function ChatScreen() {
 
   const fetchMessages = useCallback(async () => {
     try {
-      const [inboxRes, sentRes] = await Promise.all([
-        fetch("/api/messages/inbox"),
-        fetch("/api/messages/sent"),
-      ]);
-      const inbox: Message[] = inboxRes.ok ? await inboxRes.json() : [];
-      const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
-      setMessages(filterConversation(inbox, sent, station));
+      const res = await fetch("/api/messages");
+      const allMessages: Message[] = res.ok ? await res.json() : [];
+      setMessages(filterConversation(allMessages, station));
     } catch {
       setError(t("loadError"));
     } finally {
@@ -103,10 +99,11 @@ export default function ChatScreen() {
             orig,
             dest: [station],
             name: text.trim() || selectedFile.name,
-            text: text.trim() || selectedFile.name,
+            text: null,
             file: uploadData.filename ?? selectedFile.name,
             fileid,
             mimetype: uploadData.mimetype ?? selectedFile.type ?? "application/octet-stream",
+            sent_at: new Date().toISOString(), // Better practice for dates
           }),
         });
         if (!msgRes.ok) {

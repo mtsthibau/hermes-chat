@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { Message } from "@/lib/message";
-import { buildConversations, type Conversation } from "@/lib/conversation";
+import { buildConversations, stationId, type Conversation } from "@/lib/conversation";
 import { formatTimeOrDate } from "@/lib/formatting";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
@@ -24,13 +24,9 @@ export default function Home() {
     setLoading(true);
     setError(null);
     try {
-      const [inboxRes, sentRes] = await Promise.all([
-        fetch("/api/messages/inbox"),
-        fetch("/api/messages/sent"),
-      ]);
-      const inbox: Message[] = inboxRes.ok ? await inboxRes.json() : [];
-      const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
-      setConversations(buildConversations(inbox, sent));
+      const res = await fetch("/api/messages");
+      const messages: Message[] = res.ok ? await res.json() : [];
+      setConversations(buildConversations(messages));
     } catch {
       setError(t("loadError"));
     } finally {
@@ -55,7 +51,8 @@ export default function Home() {
       .then((list: { name: string; alias: string }[] | null) => {
         if (!Array.isArray(list)) return;
         const map = new Map<string, string>();
-        for (const s of list) map.set(s.name, s.alias);
+        // Normalize keys so aliasMap lookups work regardless of @domain suffix
+        for (const s of list) map.set(stationId(s.name), s.alias);
         setAliasMap(map);
       })
       .catch(() => {});
@@ -111,7 +108,7 @@ export default function Home() {
               className="flex items-center px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/60 border-b border-gray-100 dark:border-gray-800 cursor-pointer transition-colors"
             >
               {/* Avatar */}
-              <div className="w-12 h-12 shrink-0 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-lg mr-3 uppercase">
+              <div className="w-12 h-12 shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg mr-3 uppercase">
                 {(aliasMap.get(conv.station) ?? conv.station)[0]}
               </div>
               {/* Info */}
