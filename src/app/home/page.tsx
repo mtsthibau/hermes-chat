@@ -8,10 +8,15 @@ import { buildConversations, type Conversation } from "@/lib/conversation";
 import { formatTimeOrDate } from "@/lib/formatting";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useTranslations } from "next-intl";
+import { useLocale } from "@/providers/LocaleProvider";
 
 export default function Home() {
   const user = useAuthGuard();
   const { theme, toggle } = useTheme();
+  const { locale, setLocale } = useLocale();
+  const t = useTranslations("home");
+  const tTheme = useTranslations("theme");
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -29,11 +34,11 @@ export default function Home() {
       const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
       setConversations(buildConversations(inbox, sent));
     } catch {
-      setError("Failed to load messages.");
+      setError(t("loadError"));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (user) fetchMessages();
@@ -52,32 +57,39 @@ export default function Home() {
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 px-4 py-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <div className="flex items-center gap-3">
-          <Image src="/logo-hermes-500.png" alt="HERMES" width={38} height={26} className="dark:invert" />
-          <span className="text-gray-900 dark:text-white font-semibold text-lg">HERMES Chat</span>
+        <div className="flex items-center gap-1">
+          <Image src="/logo-hermes-500.png" alt="HERMES" width={78} height={66} className="dark:invert" />
+          <span className="text-gray-500 dark:text-white font-semibold text-lg">Chat</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-gray-500 dark:text-gray-400 text-sm hidden sm:block">{user?.name || user?.email}</span>
           <button
             onClick={toggle}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-            title="Toggle theme"
-            aria-label="Toggle theme"
+            title={tTheme("toggle")}
+            aria-label={tTheme("toggle")}
           >
-            {theme === "dark" ? "☀" : "🌙"}
+            {theme === "dark" ? <span aria-label={tTheme("lightMode")} role="img">☀</span> : <span aria-label={tTheme("darkMode")} role="img">⏾</span>}
           </button>
           <button
             onClick={fetchMessages}
             className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-            title="Refresh"
+            title={t("refresh")}
           >
             ↻
+          </button>
+          <button
+            onClick={() => setLocale(locale === "pt" ? "en" : "pt")}
+            aria-label="Switch language"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs font-semibold px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            {locale === "pt" ? "EN" : "PT"}
           </button>
           <button
             onClick={logout}
             className="text-gray-500 dark:text-gray-400 hover:text-red-500 text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            Logout
+            {t("logout")}
           </button>
         </div>
       </div>
@@ -86,7 +98,7 @@ export default function Home() {
       <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
         <input
           type="text"
-          placeholder="Search conversations…"
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-500"
@@ -97,7 +109,7 @@ export default function Home() {
       <div className="flex-1 overflow-y-auto">
         {loading && (
           <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
-            Loading conversations…
+            {t("loading")}
           </div>
         )}
         {error && (
@@ -105,7 +117,7 @@ export default function Home() {
         )}
         {!loading && !error && filtered.length === 0 && (
           <div className="flex items-center justify-center h-32 text-gray-400 dark:text-gray-500 text-sm">
-            No conversations yet.
+            {t("noConversations")}
           </div>
         )}
         {!loading &&
@@ -128,7 +140,7 @@ export default function Home() {
                   </span>
                 </div>
                 <p className="text-gray-500 dark:text-gray-400 text-sm truncate">
-                  {conv.lastMessage.inbox ? "" : "You: "}
+                  {conv.lastMessage.inbox ? "" : `${t("you")}: `}
                   {conv.lastMessage.text || conv.lastMessage.name}
                 </p>
               </div>

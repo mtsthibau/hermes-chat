@@ -4,10 +4,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useTranslations } from "next-intl";
+import { useLocale } from "@/providers/LocaleProvider";
 
 export default function Login() {
   const router = useRouter();
   const { theme, toggle } = useTheme();
+  const { locale, setLocale } = useLocale();
+  const t = useTranslations("login");
+  const tTheme = useTranslations("theme");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -28,14 +33,14 @@ export default function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError("Invalid email or password.");
+        setError(t("invalidCredentials"));
         return;
       }
 
       localStorage.setItem("hermes_user", JSON.stringify(data));
       router.push("/home");
     } catch {
-      setError("Connection error. Please try again.");
+      setError(t("connectionError"));
     } finally {
       setLoading(false);
     }
@@ -45,10 +50,17 @@ export default function Login() {
     <div className="relative flex min-h-screen flex-1 flex-col justify-center bg-gray-50 dark:bg-gray-900 px-6 py-20 lg:px-8">
       <button
         onClick={toggle}
-        aria-label="Toggle theme"
+        aria-label={tTheme("toggle")}
         className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-lg"
       >
-        {theme === "dark" ? "☀" : "🌙"}
+        {theme === "dark" ? <span aria-label={tTheme("lightMode")} role="img">☀</span> : <span aria-label={tTheme("darkMode")} role="img">⏾</span>}
+      </button>
+      <button
+        onClick={() => setLocale(locale === "pt" ? "en" : "pt")}
+        aria-label="Switch language"
+        className="absolute top-4 right-16 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold"
+      >
+        {locale === "pt" ? "EN" : "PT"}
       </button>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm object-center">
         <Image
@@ -60,7 +72,7 @@ export default function Login() {
           priority
         />
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">
-          Sign in to your HERMES account
+          {t("title")}
         </h2>
       </div>
 
@@ -68,7 +80,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
-              Username
+              {t("username")}
             </label>
             <div className="mt-2">
               <input
@@ -87,11 +99,11 @@ export default function Login() {
           <div>
             <div className="flex items-center justify-between">
               <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900 dark:text-white">
-                Password
+                {t("password")}
               </label>
               <div className="text-sm">
                 <a href="#" className="font-semibold text-orange-500 hover:text-orange-400">
-                  Forgot password?
+                  {t("forgotPassword")}
                 </a>
               </div>
             </div>
@@ -119,7 +131,7 @@ export default function Login() {
               disabled={loading}
               className="flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? t("signingIn") : t("signIn")}
             </button>
           </div>
         </form>

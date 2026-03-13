@@ -8,10 +8,13 @@ import { filterConversation } from "@/lib/conversation";
 import { formatTime, formatDateDivider, isSameDay } from "@/lib/formatting";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTheme } from "@/providers/ThemeProvider";
+import { useTranslations } from "next-intl";
 
 export default function ChatScreen() {
   useAuthGuard();
   const { theme, toggle } = useTheme();
+  const t = useTranslations("chat");
+  const tTheme = useTranslations("theme");
   const params = useParams();
   const station = decodeURIComponent(params.station as string);
 
@@ -34,11 +37,11 @@ export default function ChatScreen() {
       const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
       setMessages(filterConversation(inbox, sent, station));
     } catch {
-      setError("Failed to load messages.");
+      setError(t("loadError"));
     } finally {
       setLoading(false);
     }
-  }, [station]);
+  }, [station, t]);
 
   useEffect(() => {
     fetchMessages();
@@ -71,7 +74,7 @@ export default function ChatScreen() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data?.message ?? "Failed to send message.");
+        setError(data?.message ?? t("sendError"));
         return;
       }
 
@@ -79,7 +82,7 @@ export default function ChatScreen() {
       await fetchMessages();
       inputRef.current?.focus();
     } catch {
-      setError("Connection error. Please try again.");
+      setError(t("connectionError"));
     } finally {
       setSending(false);
     }
@@ -92,7 +95,7 @@ export default function ChatScreen() {
         <Link
           href="/home"
           className="text-orange-500 hover:text-orange-400 mr-3 text-xl leading-none"
-          aria-label="Back"
+          aria-label={t("back")}
         >
           ←
         </Link>
@@ -105,15 +108,15 @@ export default function ChatScreen() {
         <button
           onClick={toggle}
           className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-2"
-          title="Toggle theme"
-          aria-label="Toggle theme"
+          title={tTheme("toggle")}
+          aria-label={tTheme("toggle")}
         >
           {theme === "dark" ? "☀" : "🌙"}
         </button>
         <button
           onClick={fetchMessages}
           className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-2"
-          title="Refresh"
+          title={t("refresh")}
         >
           ↻
         </button>
@@ -122,11 +125,11 @@ export default function ChatScreen() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
         {loading && (
-          <div className="flex justify-center text-gray-500 dark:text-gray-400 py-10">Loading messages…</div>
+          <div className="flex justify-center text-gray-500 dark:text-gray-400 py-10">{t("loading")}</div>
         )}
         {!loading && messages.length === 0 && (
           <div className="flex justify-center text-gray-400 dark:text-gray-500 text-sm py-10">
-            No messages yet. Say hello!
+            {t("noMessages")}
           </div>
         )}
         {!loading &&
@@ -187,7 +190,7 @@ export default function ChatScreen() {
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder={`Message ${station}…`}
+            placeholder={t("messagePlaceholder", { station })}
             disabled={sending}
             className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-full px-4 py-2 text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50"
           />
@@ -195,7 +198,7 @@ export default function ChatScreen() {
             type="submit"
             disabled={sending || !text.trim()}
             className="w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center text-white shrink-0 transition-colors"
-            aria-label="Send"
+            aria-label={t("send")}
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 rotate-90">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

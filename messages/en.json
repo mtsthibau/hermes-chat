@@ -1,0 +1,37 @@
+{
+  "login": {
+    "title": "Sign in to your HERMES account",
+    "username": "Username",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "invalidCredentials": "Invalid email or password.",
+    "connectionError": "Connection error. Please try again."
+  },
+  "home": {
+    "searchPlaceholder": "Search conversations…",
+    "loading": "Loading conversations…",
+    "loadError": "Failed to load messages.",
+    "noConversations": "No conversations yet.",
+    "you": "You",
+    "logout": "Logout",
+    "refresh": "Refresh"
+  },
+  "chat": {
+    "loading": "Loading messages…",
+    "noMessages": "No messages yet. Say hello!",
+    "loadError": "Failed to load messages.",
+    "sendError": "Failed to send message.",
+    "connectionError": "Connection error. Please try again.",
+    "messagePlaceholder": "Message {station}…",
+    "back": "Back",
+    "send": "Send",
+    "refresh": "Refresh"
+  },
+  "theme": {
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggle": "Toggle theme"
+  }
+}
