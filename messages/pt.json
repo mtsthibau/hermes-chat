@@ -33,7 +33,8 @@
     "attachFile": "Anexar arquivo",
     "removeFile": "Remover arquivo",
     "openFile": "Abrir arquivo",
-    "fileSendError": "Falha ao enviar arquivo."
+    "fileSendError": "Falha ao enviar arquivo.",
+    "passPlaceholder": "Senha (opcional)"
   },
   "theme": {
     "lightMode": "Modo claro",

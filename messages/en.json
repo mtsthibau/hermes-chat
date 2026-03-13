@@ -33,7 +33,8 @@
     "attachFile": "Attach file",
     "removeFile": "Remove file",
     "openFile": "Open file",
-    "fileSendError": "Failed to send file."
+    "fileSendError": "Failed to send file.",
+    "passPlaceholder": "Password (optional)"
   },
   "theme": {
     "lightMode": "Light mode",

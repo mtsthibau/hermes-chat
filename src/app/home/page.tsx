@@ -16,6 +16,9 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [station, setStation] = useState<string | null>(null);
+  // map: callsign → alias  (e.g. "PU2UIT-2" → "estacao2")
+  const [aliasMap, setAliasMap] = useState<Map<string, string>>(new Map());
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -39,19 +42,40 @@ export default function Home() {
     if (user) fetchMessages();
   }, [user, fetchMessages]);
 
+  useEffect(() => {
+    fetch("/api/config")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((cfg) => { if (cfg?.host) setStation(cfg.host); })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/stations")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((list: { name: string; alias: string }[] | null) => {
+        if (!Array.isArray(list)) return;
+        const map = new Map<string, string>();
+        for (const s of list) map.set(s.name, s.alias);
+        setAliasMap(map);
+      })
+      .catch(() => {});
+  }, []);
+
   function logout() {
     localStorage.removeItem("hermes_user");
     window.location.replace("/");
   }
 
-  const filtered = conversations.filter((c) =>
-    c.station.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filtered = conversations.filter((c) => {
+    const alias = aliasMap.get(c.station) ?? c.station;
+    const q = search.toLowerCase();
+    return alias.toLowerCase().includes(q) || c.station.toLowerCase().includes(q);
+  });
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <Navbar user={user} onRefresh={fetchMessages} onLogout={logout} />
+      <Navbar user={user} station={station} onRefresh={fetchMessages} onLogout={logout} />
 
       {/* Search */}
       <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
@@ -88,12 +112,19 @@ export default function Home() {
             >
               {/* Avatar */}
               <div className="w-12 h-12 shrink-0 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-lg mr-3 uppercase">
-                {conv.station[0]}
+                {(aliasMap.get(conv.station) ?? conv.station)[0]}
               </div>
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-baseline mb-0.5">
-                  <span className="text-gray-900 dark:text-white font-medium truncate">{conv.station}</span>
+                  <div className="min-w-0">
+                    <span className="text-gray-900 dark:text-white font-medium truncate block">
+                      {aliasMap.get(conv.station) ?? conv.station}
+                    </span>
+                    {aliasMap.has(conv.station) && (
+                      <span className="text-xs text-gray-400 dark:text-gray-500 truncate block">{conv.station}</span>
+                    )}
+                  </div>
                   <span className="text-gray-400 dark:text-gray-500 text-xs shrink-0 ml-2">
                     {formatTimeOrDate(conv.lastMessage.sent_at)}
                   </span>

@@ -9,13 +9,14 @@ import type { HermesUser } from "@/lib/user";
 
 interface NavbarProps {
   user?: HermesUser | null;
+  station?: string | null;
   onRefresh?: () => void;
   onLogout?: () => void;
   /** Optional left-side slot (e.g. back button + station name for the chat screen) */
   left?: React.ReactNode;
 }
 
-export default function Navbar({ user, onRefresh, onLogout, left }: NavbarProps) {
+export default function Navbar({ user, station, onRefresh, onLogout, left }: NavbarProps) {
   const { theme, toggle } = useTheme();
   const { locale, setLocale } = useLocale();
   const t = useTranslations("home");
@@ -39,8 +40,8 @@ export default function Navbar({ user, onRefresh, onLogout, left }: NavbarProps)
       {/* Left side */}
       {left ?? (
         <div className="flex items-center gap-1">
-          <Image src="/logo-hermes-500.png" alt="HERMES" width={78} height={66} className="dark:invert" />
-          <span className="text-gray-500 dark:text-white font-semibold text-lg">Chat</span>
+          <Image src="/logo-hermes-500-wings.png" alt="HERMES" width={68} height={46} className="dark:invert" />
+          <span className="text-gray-700 dark:text-white font-semibold text-md">HERMES Chat</span>
         </div>
       )}
 
@@ -73,6 +74,9 @@ export default function Navbar({ user, onRefresh, onLogout, left }: NavbarProps)
             {/* Username */}
             {user && (
               <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                {station && (
+                  <p className="text-xs text-orange-500 font-semibold truncate mt-0.5">{station}</p>
+                )}
                 <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">{t("loggedInAs")}</p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
                   {user.name || user.email}
@@ -94,7 +98,7 @@ export default function Navbar({ user, onRefresh, onLogout, left }: NavbarProps)
               onClick={() => { setLocale(locale === "pt" ? "en" : "pt"); setOpen(false); }}
               className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
-              <span className="text-base" aria-hidden="true">🌐</span>
+              <span className="text-base" aria-hidden="true">友</span>
               {locale === "pt" ? "English" : "Português"}
             </button>
 
@@ -117,7 +121,7 @@ export default function Navbar({ user, onRefresh, onLogout, left }: NavbarProps)
                   onClick={() => { onLogout(); setOpen(false); }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
-                  <span className="text-base" aria-hidden="true">⎋</span>
+                  <span className="text-base" aria-hidden="true">⍈</span>
                   {t("logout")}
                 </button>
               </>

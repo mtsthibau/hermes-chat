@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Message } from "@/lib/message";
 import { filterConversation } from "@/lib/conversation";
 import { formatTime, formatDateDivider, isSameDay } from "@/lib/formatting";
+import Navbar from "@/components/Navbar";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 
@@ -19,6 +20,7 @@ export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [pass, setPass] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +73,7 @@ export default function ChatScreen() {
       try {
         const uploadForm = new FormData();
         uploadForm.append("fileup", selectedFile);
+        if (pass) uploadForm.append("pass", pass);
         const uploadRes = await fetch("/api/ufile", { method: "POST", body: uploadForm });
         if (!uploadRes.ok) {
           const data = await uploadRes.json();
@@ -88,7 +91,7 @@ export default function ChatScreen() {
             orig,
             dest: [station],
             name: text.trim() || selectedFile.name,
-            text: text.trim() || selectedFile.text,
+            text: text.trim() || selectedFile.name,
             file: uploadData.filename ?? selectedFile.name,
             fileid,
             mimetype: uploadData.mimetype ?? selectedFile.type ?? "application/octet-stream",
@@ -101,6 +104,7 @@ export default function ChatScreen() {
         }
         setText("");
         setSelectedFile(null);
+        setPass("");
         if (fileInputRef.current) fileInputRef.current.value = "";
         await fetchMessages();
         inputRef.current?.focus();
@@ -148,28 +152,26 @@ export default function ChatScreen() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 px-4 py-3 flex items-center border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <Link
-          href="/home"
-          className="text-orange-500 hover:text-orange-400 mr-3 text-xl leading-none"
-          aria-label={t("back")}
-        >
-          ←
-        </Link>
-        <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold uppercase mr-3 shrink-0">
-          {station[0]}
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-gray-900 dark:text-white font-semibold truncate">{station}</p>
-        </div>
-        <button
-          onClick={fetchMessages}
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-2"
-          title={t("refresh")}
-        >
-          ↻
-        </button>
-      </div>
+      <Navbar
+        left={
+          <div className="flex items-center gap-3 min-w-0">
+            <Link
+              href="/home"
+              className="text-orange-500 hover:text-orange-400 text-xl leading-none shrink-0"
+              aria-label={t("back")}
+            >
+              く
+            </Link>
+            <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold uppercase shrink-0">
+              {station[0]}
+            </div>
+            <div className="min-w-0">
+              <p className="text-gray-900 dark:text-white font-semibold truncate">{station}</p>
+            </div>
+          </div>
+        }
+        onRefresh={fetchMessages}
+      />
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
@@ -200,8 +202,12 @@ export default function ChatScreen() {
                 )}
                 <div className={`flex mb-1 ${isMine ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[75%] sm:max-w-[60%] rounded-2xl px-4 py-2 shadow ${isMine
-                      ? "bg-orange-500 text-white rounded-br-sm"
+                    className={`${
+                      msg.file && msg.fileid && msg.mimetype?.startsWith("audio/")
+                        ? "w-[90%] sm:w-[70%]"
+                        : "max-w-[75%] sm:max-w-[60%]"
+                    } rounded-2xl px-4 py-2 shadow ${isMine
+                      ? "bg-blue-900 text-white rounded-br-sm"
                       : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
                       }`}
                   >
@@ -224,8 +230,17 @@ export default function ChatScreen() {
                           />
                           <p className="text-xs opacity-70 truncate">{msg.file}</p>
                           <p className="text-md opacity-100 truncate">{msg.text}</p>
-
                         </a>
+                      ) : msg.mimetype?.startsWith("audio/") ? (
+                        <div className="flex flex-col gap-1">
+                          <audio
+                            controls
+                            src={`${hermesBase}/file/${msg.fileid}`}
+                            className="w-full rounded-lg"
+                            preload="metadata"
+                          />
+                          <p className="text-xs opacity-70 truncate">{msg.file}</p>
+                        </div>
                       ) : (
                         <a
                           href={`${hermesBase}/file/${msg.fileid}`}
@@ -283,10 +298,16 @@ export default function ChatScreen() {
               </svg>
             )}
             <span className="flex-1 truncate text-gray-800 dark:text-gray-200 text-sm">{selectedFile.name}</span>
-            <span className="flex-1 truncate text-gray-800 dark:text-gray-200 text-sm">{selectedFile.name}</span>
+            <input
+              type="password"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              placeholder={t("passPlaceholder")}
+              className="w-28 bg-white dark:bg-gray-600 text-gray-900 dark:text-white rounded px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-orange-500 border border-gray-300 dark:border-gray-500"
+            />
             <button
               type="button"
-              onClick={() => { setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+              onClick={() => { setSelectedFile(null); setPass(""); if (fileInputRef.current) fileInputRef.current.value = ""; }}
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg leading-none px-1"
               aria-label={t("removeFile")}
             >×</button>
@@ -329,7 +350,7 @@ export default function ChatScreen() {
             className="w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center text-white shrink-0 transition-colors"
             aria-label={t("send")}
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 rotate-90">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 rotate-120">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
             </svg>
           </button>
