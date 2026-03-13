@@ -43,9 +43,9 @@ export default function Home() {
   }, [user, fetchMessages]);
 
   useEffect(() => {
-    fetch("/api/config")
+    fetch("/api/sys")
       .then((r) => (r.ok ? r.json() : null))
-      .then((cfg) => { if (cfg?.host) setStation(cfg.host); })
+      .then((status) => { if (status?.domain) setStation(status.domain); })
       .catch(() => {});
   }, []);
 

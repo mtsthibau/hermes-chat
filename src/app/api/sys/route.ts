@@ -3,6 +3,6 @@ import { hermesGet } from '@/lib/hermesApi';
 
 export async function GET(request: NextRequest) {
   const cookie = request.headers.get('cookie') ?? undefined;
-  const { data, status } = await hermesGet('sys/config', cookie);
+  const { data, status } = await hermesGet('sys/status', cookie);
   return NextResponse.json(data, { status });
 }
