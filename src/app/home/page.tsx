@@ -8,6 +8,7 @@ import { formatTimeOrDate } from "@/lib/formatting";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
+import NewChatFab from "@/components/NewChatFab";
 
 export default function Home() {
   const user = useAuthGuard();
@@ -17,7 +18,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [station, setStation] = useState<string | null>(null);
-  // map: callsign → alias  (e.g. "PU2UIT-2" → "estacao2")
   const [aliasMap, setAliasMap] = useState<Map<string, string>>(new Map());
 
   const fetchMessages = useCallback(async () => {
@@ -143,6 +143,8 @@ export default function Home() {
             </Link>
           ))}
       </div>
+
+      <NewChatFab />
     </div>
   );
 }

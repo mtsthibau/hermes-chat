@@ -15,7 +15,7 @@ interface LocaleContextValue {
 }
 
 const LocaleContext = createContext<LocaleContextValue>({
-  locale: "pt",
+  locale: "en",
   setLocale: () => {},
 });
 
@@ -24,7 +24,7 @@ export function useLocale() {
 }
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("pt");
+  const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {
     const stored = localStorage.getItem("hermes_locale") as Locale | null;

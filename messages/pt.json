@@ -36,6 +36,15 @@
     "fileSendError": "Falha ao enviar arquivo.",
     "passPlaceholder": "Senha (opcional)"
   },
+  "newChat": {
+    "title": "Nova conversa",
+    "back": "Voltar",
+    "selectStation": "Selecione uma estação",
+    "stationSearchPlaceholder": "Buscar estações…",
+    "noStations": "Nenhuma estação encontrada.",
+    "loading": "Carregando estações…",
+    "loadError": "Falha ao carregar estações."
+  },
   "theme": {
     "lightMode": "Modo claro",
     "darkMode": "Modo escuro",

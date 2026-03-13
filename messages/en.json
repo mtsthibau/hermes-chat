@@ -36,6 +36,15 @@
     "fileSendError": "Failed to send file.",
     "passPlaceholder": "Password (optional)"
   },
+  "newChat": {
+    "title": "New chat",
+    "back": "Back",
+    "selectStation": "Select a station",
+    "stationSearchPlaceholder": "Search stations…",
+    "noStations": "No stations found.",
+    "loading": "Loading stations…",
+    "loadError": "Failed to load stations."
+  },
   "theme": {
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
