@@ -11,6 +11,7 @@ export async function GET(
   if (!ALLOWED_TYPES.has(type)) {
     return NextResponse.json({ message: 'Invalid message type.' }, { status: 400 });
   }
-  const { data, status } = await hermesGet(`message/type/${type}`);
+  const cookie = _req.headers.get('cookie') ?? undefined;
+  const { data, status } = await hermesGet(`message/type/${type}`, cookie);
   return NextResponse.json(data, { status });
 }

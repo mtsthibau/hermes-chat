@@ -26,9 +26,14 @@
     "sendError": "Failed to send message.",
     "connectionError": "Connection error. Please try again.",
     "messagePlaceholder": "Message {station}…",
+    "captionPlaceholder": "Add a caption (optional)…",
     "back": "Back",
     "send": "Send",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "attachFile": "Attach file",
+    "removeFile": "Remove file",
+    "openFile": "Open file",
+    "fileSendError": "Failed to send file."
   },
   "theme": {
     "lightMode": "Light mode",

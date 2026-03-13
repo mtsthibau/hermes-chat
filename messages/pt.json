@@ -26,9 +26,14 @@
     "sendError": "Falha ao enviar mensagem.",
     "connectionError": "Erro de conexão. Tente novamente.",
     "messagePlaceholder": "Mensagem para {station}…",
+    "captionPlaceholder": "Adicione uma legenda (opcional)…",
     "back": "Voltar",
     "send": "Enviar",
-    "refresh": "Atualizar"
+    "refresh": "Atualizar",
+    "attachFile": "Anexar arquivo",
+    "removeFile": "Remover arquivo",
+    "openFile": "Abrir arquivo",
+    "fileSendError": "Falha ao enviar arquivo."
   },
   "theme": {
     "lightMode": "Modo claro",

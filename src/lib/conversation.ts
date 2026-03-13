@@ -48,6 +48,6 @@ export function filterConversation(
   const fromContact = inbox.filter((m) => m.orig === station);
   const toContact = sent.filter((m) => destArray(m.dest).includes(station));
   return [...fromContact, ...toContact].sort(
-    (a, b) => new Date(a.sent_at).getTime() - new Date(b.sent_at).getTime(),
+    (a, b) => new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime(),
   );
 }
