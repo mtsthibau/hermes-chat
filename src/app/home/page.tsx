@@ -2,21 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import type { Message } from "@/lib/message";
 import { buildConversations, type Conversation } from "@/lib/conversation";
 import { formatTimeOrDate } from "@/lib/formatting";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
-import { useTheme } from "@/providers/ThemeProvider";
 import { useTranslations } from "next-intl";
-import { useLocale } from "@/providers/LocaleProvider";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const user = useAuthGuard();
-  const { theme, toggle } = useTheme();
-  const { locale, setLocale } = useLocale();
   const t = useTranslations("home");
-  const tTheme = useTranslations("theme");
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -56,43 +51,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 px-4 py-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <div className="flex items-center gap-1">
-          <Image src="/logo-hermes-500.png" alt="HERMES" width={78} height={66} className="dark:invert" />
-          <span className="text-gray-500 dark:text-white font-semibold text-lg">Chat</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-gray-500 dark:text-gray-400 text-sm hidden sm:block">{user?.name || user?.email}</span>
-          <button
-            onClick={toggle}
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-lg px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-            title={tTheme("toggle")}
-            aria-label={tTheme("toggle")}
-          >
-            {theme === "dark" ? <span aria-label={tTheme("lightMode")} role="img">☀</span> : <span aria-label={tTheme("darkMode")} role="img">⏾</span>}
-          </button>
-          <button
-            onClick={fetchMessages}
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-            title={t("refresh")}
-          >
-            ↻
-          </button>
-          <button
-            onClick={() => setLocale(locale === "pt" ? "en" : "pt")}
-            aria-label="Switch language"
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs font-semibold px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            {locale === "pt" ? "EN" : "PT"}
-          </button>
-          <button
-            onClick={logout}
-            className="text-gray-500 dark:text-gray-400 hover:text-red-500 text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            {t("logout")}
-          </button>
-        </div>
-      </div>
+      <Navbar user={user} onRefresh={fetchMessages} onLogout={logout} />
 
       {/* Search */}
       <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">

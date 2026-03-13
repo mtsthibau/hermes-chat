@@ -16,7 +16,8 @@
     "noConversations": "No conversations yet.",
     "you": "You",
     "logout": "Logout",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "loggedInAs": "Logged in as"
   },
   "chat": {
     "loading": "Loading messages…",
