@@ -9,6 +9,7 @@ import { formatTime, formatDateDivider, isSameDay } from "@/lib/formatting";
 import Navbar from "@/components/Navbar";
 import DeleteMessageButton from "@/components/DeleteMessageButton";
 import NextSyncBadge from "@/components/NextSyncBadge";
+import DoubleCheck from "@/components/DoubleCheck";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 
@@ -28,6 +29,8 @@ export default function ChatScreen() {
   const [error, setError] = useState<string | null>(null);
   const [orig, setOrig] = useState("chat");
   const [alias, setAlias] = useState<string | null>(null);
+  const [sentIds, setSentIds] = useState<Set<number>>(new Set());
+  const [syncedIds, setSyncedIds] = useState<Set<number>>(new Set());
 
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -36,9 +39,46 @@ export default function ChatScreen() {
 
   const fetchMessages = useCallback(async () => {
     try {
-      const res = await fetch("/api/messages");
-      const allMessages: Message[] = res.ok ? await res.json() : [];
+      const [msgRes, sentRes, uulsRes] = await Promise.all([
+        fetch("/api/messages"),
+        fetch("/api/messages/sent"),
+        fetch("/api/sys/uuls"),
+      ]);
+      const allMessages: Message[] = msgRes.ok ? await msgRes.json() : [];
       setMessages(filterConversation(allMessages, station));
+
+      // Build the set of unsynced (pending) sent-message IDs by matching:
+      // sentMessages (IDs I actually sent) ∩ uuls queue (IDs still pending transmission)
+      if (sentRes.ok && uulsRes.ok) {
+        const sentData: unknown = await sentRes.json();
+        const uulsData: unknown = await uulsRes.json();
+
+        const sentIds = new Set<number>(
+          Array.isArray(sentData)
+            ? (sentData as Message[]).map((m) => m.id)
+            : []
+        );
+
+        // Collect all messageIds currently in the uuls queue (pending transmission)
+        const uulsPendingIds = new Set<number>(
+          Array.isArray(uulsData)
+            ? (uulsData as unknown[]).flatMap((entry) => {
+                const e = entry as Record<string, unknown>;
+                return typeof e.messageId === "number" ? [e.messageId] : [];
+              })
+            : []
+        );
+
+        // Track all sent IDs for single-check display
+        setSentIds(sentIds);
+
+        // Double check = sent AND not in the uuls queue
+        const synced = new Set<number>();
+        for (const id of sentIds) {
+          if (!uulsPendingIds.has(id)) synced.add(id);
+        }
+        setSyncedIds(synced);
+      }
     } catch {
       setError(t("loadError"));
     } finally {
@@ -286,13 +326,16 @@ export default function ChatScreen() {
                           <p className="text-xs font-semibold opacity-70 mb-1">{msg.name}</p>
                         )}
                         <p className="text-sm whitespace-pre-wrap break-words">
-                          {msg.text || msg.name}
+                          {msg.text != msg.name && msg.text}
                         </p>
                       </>
                     )}
-                    <p className={`text-xs mt-1 opacity-60 ${isMine ? "text-right" : "text-left"}`}>
-                      {formatTime(msg.sent_at)}
-                      {msg.secure && " 🔒"}
+                    <p className={`text-xs mt-1 opacity-60 flex items-center gap-1 ${isMine ? "justify-end" : "justify-start"}`}>
+                      <span>{formatTime(msg.sent_at)}</span>
+                      {msg.secure && <span>🔒</span>}
+                      {isMine && sentIds.has(msg.id) && (
+                        <DoubleCheck synced={syncedIds.has(msg.id)} />
+                      )}
                     </p>
                   </div>
                 </div>
