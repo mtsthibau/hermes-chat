@@ -107,8 +107,8 @@ export default function NewChatPage() {
               onClick={() => handleSelect(s.name)}
               className="w-full flex items-center px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/60 border-b border-gray-100 dark:border-gray-800 transition-colors text-left"
             >
-              <div className="w-12 h-12 shrink-0 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-lg mr-3 uppercase">
-                {(s.alias || s.name)[0]}
+              <div className="w-12 h-12 shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg mr-3 uppercase">
+                {(s.alias || s.name).split("", 2)}
               </div>
               <div className="flex-1 min-w-0">
                 <span className="text-gray-900 dark:text-white font-medium truncate block">

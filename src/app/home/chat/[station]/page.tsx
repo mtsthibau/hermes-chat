@@ -103,7 +103,7 @@ export default function ChatScreen() {
             file: uploadData.filename ?? selectedFile.name,
             fileid,
             mimetype: uploadData.mimetype ?? selectedFile.type ?? "application/octet-stream",
-            sent_at: new Date().toISOString(), // Better practice for dates
+            sent_at: new Date().toISOString(),
           }),
         });
         if (!msgRes.ok) {
@@ -139,6 +139,7 @@ export default function ChatScreen() {
           dest: [station],
           name: trimmed.length > 60 ? trimmed.substring(0, 57) + "..." : trimmed,
           text: trimmed,
+          sent_at: new Date().toISOString()
         }),
       });
 
@@ -212,13 +213,12 @@ export default function ChatScreen() {
                 )}
                 <div className={`flex mb-1 ${isMine ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`${
-                      msg.file && msg.fileid && msg.mimetype?.startsWith("audio/")
+                    className={`${msg.file && msg.fileid && msg.mimetype?.startsWith("audio/")
                         ? "w-[90%] sm:w-[70%]"
                         : "max-w-[75%] sm:max-w-[60%]"
-                    } rounded-2xl px-4 py-2 shadow ${isMine
-                      ? "bg-gray-800 shadow text-white rounded-br-sm"
-                      : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
+                      } rounded-2xl px-4 py-2 shadow ${isMine
+                        ? "bg-gray-800 shadow text-white rounded-br-sm"
+                        : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
                       }`}
                   >
                     <p className="text-md opacity-100 truncate">{msg.name}</p>

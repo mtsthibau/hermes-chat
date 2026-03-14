@@ -109,7 +109,7 @@ export default function Home() {
             >
               {/* Avatar */}
               <div className="w-12 h-12 shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg mr-3 uppercase">
-                {(aliasMap.get(conv.station) ?? conv.station)[0]}
+                {(aliasMap.get(conv.station) ?? conv.station).split("", 2)}
               </div>
               {/* Info */}
               <div className="flex-1 min-w-0">
