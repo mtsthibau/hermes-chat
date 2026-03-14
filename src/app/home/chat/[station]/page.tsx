@@ -8,6 +8,7 @@ import { filterConversation } from "@/lib/conversation";
 import { formatTime, formatDateDivider, isSameDay } from "@/lib/formatting";
 import Navbar from "@/components/Navbar";
 import DeleteMessageButton from "@/components/DeleteMessageButton";
+import NextSyncBadge from "@/components/NextSyncBadge";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 
@@ -186,6 +187,8 @@ export default function ChatScreen() {
         }
         onRefresh={fetchMessages}
       />
+
+      <NextSyncBadge />
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">

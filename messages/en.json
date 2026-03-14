@@ -36,7 +36,8 @@
     "fileSendError": "Failed to send file.",
     "passPlaceholder": "Password (optional)",
     "deleteMessage": "Delete message",
-    "deleteError": "Failed to delete message."
+    "deleteError": "Failed to delete message.",
+    "nextSync": "Next sync in {countdown}"
   },
   "newChat": {
     "title": "New chat",

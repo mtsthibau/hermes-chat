@@ -36,7 +36,8 @@
     "fileSendError": "Falha ao enviar arquivo.",
     "passPlaceholder": "Senha (opcional)",
     "deleteMessage": "Excluir mensagem",
-    "deleteError": "Falha ao excluir mensagem."
+    "deleteError": "Falha ao excluir mensagem.",
+    "nextSync": "Próxima sincronização em {countdown}"
   },
   "newChat": {
     "title": "Nova conversa",
