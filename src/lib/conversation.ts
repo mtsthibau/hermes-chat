@@ -43,7 +43,7 @@ export function buildConversations(messages: Message[]): Conversation[] {
       return {
         station: canonical,
         lastMessage: sorted[0],
-        unread: msgs.filter((m) => m.inbox).length,
+        unread: msgs.filter((m) => m.inbox).length, //TODO - verify if it`s enough to check inbox flag or if we also need a read flag from the API
       };
     })
     .sort(

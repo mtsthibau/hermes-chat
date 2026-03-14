@@ -176,7 +176,8 @@ export default function ChatScreen() {
               {(alias ?? station)[0]}
             </div>
             <div className="min-w-0">
-              <p className="text-gray-900 dark:text-white font-semibold truncate">{alias}</p>
+              <p className="text-gray-900 dark:text-white font-semibold truncate">{alias ?? station}
+              </p>
               {alias && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{station}</p>}
             </div>
           </div>
@@ -214,8 +215,8 @@ export default function ChatScreen() {
                 <div className={`flex mb-1 ${isMine ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`${msg.file && msg.fileid && msg.mimetype?.startsWith("audio/")
-                        ? "w-[90%] sm:w-[70%]"
-                        : "max-w-[75%] sm:max-w-[60%]"
+                      ? "w-[90%] sm:w-[70%]"
+                      : "max-w-[75%] sm:max-w-[60%]"
                       } rounded-2xl px-4 py-2 shadow ${isMine
                         ? "bg-gray-800 shadow text-white rounded-br-sm"
                         : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
