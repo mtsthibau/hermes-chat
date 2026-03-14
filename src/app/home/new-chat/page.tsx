@@ -37,7 +37,7 @@ export default function NewChatPage() {
       const inbox: Message[] = inboxRes.ok ? await inboxRes.json() : [];
       const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
 
-      const conversations = buildConversations(inbox, sent);
+      const conversations = buildConversations([...inbox, ...sent]);
       setExistingStations(new Set(conversations.map((c) => c.station)));
       setStations(Array.isArray(stationList) ? stationList : []);
     } finally {
