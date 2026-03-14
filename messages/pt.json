@@ -34,7 +34,9 @@
     "removeFile": "Remover arquivo",
     "openFile": "Abrir arquivo",
     "fileSendError": "Falha ao enviar arquivo.",
-    "passPlaceholder": "Senha (opcional)"
+    "passPlaceholder": "Senha (opcional)",
+    "deleteMessage": "Excluir mensagem",
+    "deleteError": "Falha ao excluir mensagem."
   },
   "newChat": {
     "title": "Nova conversa",

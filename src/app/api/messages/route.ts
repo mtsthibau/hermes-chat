@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hermesGet, hermesPost } from '@/lib/hermesApi';
+import { hermesGet, hermesPost, hermesDelete } from '@/lib/hermesApi';
 import type { Message } from '@/lib/types';
 
 /** Strip optional @domain suffix for comparison purposes. */
@@ -49,5 +49,15 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { data, status } = await hermesPost('message', body, cookie);
   
+  return NextResponse.json(data, { status });
+}
+
+export async function DELETE(request: NextRequest) {
+  const cookie = request.headers.get('cookie') ?? undefined;
+  const { id } = await request.json();
+  if (!id) {
+    return NextResponse.json({ message: 'Missing message id.' }, { status: 400 });
+  }
+  const { data, status } = await hermesDelete(`message/${id}`, cookie);
   return NextResponse.json(data, { status });
 }

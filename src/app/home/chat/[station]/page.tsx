@@ -7,6 +7,7 @@ import type { Message } from "@/lib/message";
 import { filterConversation } from "@/lib/conversation";
 import { formatTime, formatDateDivider, isSameDay } from "@/lib/formatting";
 import Navbar from "@/components/Navbar";
+import DeleteMessageButton from "@/components/DeleteMessageButton";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 
@@ -26,6 +27,7 @@ export default function ChatScreen() {
   const [error, setError] = useState<string | null>(null);
   const [orig, setOrig] = useState("chat");
   const [alias, setAlias] = useState<string | null>(null);
+
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -202,7 +204,7 @@ export default function ChatScreen() {
             const isMine = !msg.inbox;
 
             return (
-              <div key={msg.id}>
+              <div key={msg.id} className="group">
                 {showDivider && (
                   <div className="flex items-center gap-2 my-4">
                     <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
@@ -212,7 +214,15 @@ export default function ChatScreen() {
                     <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
                   </div>
                 )}
-                <div className={`flex mb-1 ${isMine ? "justify-end" : "justify-start"}`}>
+                <div className={`flex mb-1 items-end gap-1 ${isMine ? "justify-end" : "justify-start"}`}>
+                  {isMine && (
+                    <DeleteMessageButton
+                      messageId={msg.id}
+                      onDeleted={() => setMessages((prev) => prev.filter((m) => m.id !== msg.id))}
+                      onError={setError}
+                      label={t("deleteMessage")}
+                    />
+                  )}
                   <div
                     className={`${msg.file && msg.fileid && msg.mimetype?.startsWith("audio/")
                       ? "w-[90%] sm:w-[70%]"

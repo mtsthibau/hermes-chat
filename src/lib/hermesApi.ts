@@ -55,6 +55,7 @@ function hermesRequest(
 export const hermesGet = (path: string, cookie?: string) => hermesRequest(path, 'GET', undefined, cookie);
 export const hermesPost = (path: string, body: unknown, cookie?: string) =>
   hermesRequest(path, 'POST', JSON.stringify(body), cookie);
+export const hermesDelete = (path: string, cookie?: string) => hermesRequest(path, 'DELETE', undefined, cookie);
 
 export function hermesGetBuffer(
   path: string,
