@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
+import SearchInput from "@/components/ui/SearchInput";
 import type { Message } from "@/lib/message";
 import { buildConversations } from "@/lib/conversation";
 
@@ -78,16 +79,12 @@ export default function NewChatPage() {
         }
       />
 
-      <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <input
-          autoFocus
-          type="text"
-          placeholder={t("stationSearchPlaceholder")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-500"
-        />
-      </div>
+      <SearchInput
+        autoFocus
+        value={search}
+        onChange={setSearch}
+        placeholder={t("stationSearchPlaceholder")}
+      />
 
       <div className="flex-1 overflow-y-auto">
         {loading && (

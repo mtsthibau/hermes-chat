@@ -1,24 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import type { Message } from "@/lib/message";
-import { buildConversations, stationId, type Conversation } from "@/lib/conversation";
-import { formatTimeOrDate } from "@/lib/formatting";
+import { buildConversations } from "@/lib/conversation";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { useStationAlias } from "@/hooks/useStationAlias";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
 import NewChatFab from "@/components/NewChatFab";
+import SearchInput from "@/components/ui/SearchInput";
+import ConversationItem from "@/components/home/ConversationItem";
 
 export default function Home() {
   const user = useAuthGuard();
   const t = useTranslations("home");
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<Message[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [station, setStation] = useState<string | null>(null);
-  const [aliasMap, setAliasMap] = useState<Map<string, string>>(new Map());
+  const { getAlias } = useStationAlias();
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -26,7 +27,7 @@ export default function Home() {
     try {
       const res = await fetch("/api/messages");
       const messages: Message[] = res.ok ? await res.json() : [];
-      setConversations(buildConversations(messages));
+      setConversations(messages);
     } catch {
       setError(t("loadError"));
     } finally {
@@ -45,26 +46,14 @@ export default function Home() {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    fetch("/api/stations")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((list: { name: string; alias: string }[] | null) => {
-        if (!Array.isArray(list)) return;
-        const map = new Map<string, string>();
-        // Normalize keys so aliasMap lookups work regardless of @domain suffix
-        for (const s of list) map.set(stationId(s.name), s.alias);
-        setAliasMap(map);
-      })
-      .catch(() => {});
-  }, []);
-
   function logout() {
     localStorage.removeItem("hermes_user");
     window.location.replace("/");
   }
 
-  const filtered = conversations.filter((c) => {
-    const alias = aliasMap.get(c.station) ?? c.station;
+  const allConversations = buildConversations(conversations);
+  const filtered = allConversations.filter((c) => {
+    const alias = getAlias(c.station) ?? c.station;
     const q = search.toLowerCase();
     return alias.toLowerCase().includes(q) || c.station.toLowerCase().includes(q);
   });
@@ -74,16 +63,11 @@ export default function Home() {
       {/* Header */}
       <Navbar user={user} station={station} onRefresh={fetchMessages} onLogout={logout} />
 
-      {/* Search */}
-      <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <input
-          type="text"
-          placeholder={t("searchPlaceholder")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-500"
-        />
-      </div>
+      <SearchInput
+        value={search}
+        onChange={setSearch}
+        placeholder={t("searchPlaceholder")}
+      />
 
       {/* List */}
       <div className="flex-1 overflow-y-auto">
@@ -102,42 +86,11 @@ export default function Home() {
         )}
         {!loading &&
           filtered.map((conv) => (
-            <Link
+            <ConversationItem
               key={conv.station}
-              href={`/home/chat/${encodeURIComponent(conv.station)}`}
-              className="flex items-center px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/60 border-b border-gray-100 dark:border-gray-800 cursor-pointer transition-colors"
-            >
-              {/* Avatar */}
-              <div className="w-12 h-12 shrink-0 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg mr-3 uppercase">
-                {(aliasMap.get(conv.station) ?? conv.station).split("", 2)}
-              </div>
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-baseline mb-0.5">
-                  <div className="min-w-0">
-                    <span className="text-gray-900 dark:text-white font-medium truncate block">
-                      {aliasMap.get(conv.station) ?? conv.station}
-                    </span>
-                    {aliasMap.has(conv.station) && (
-                      <span className="text-xs text-gray-400 dark:text-gray-500 truncate block">{conv.station}</span>
-                    )}
-                  </div>
-                  <span className="text-gray-400 dark:text-gray-500 text-xs shrink-0 ml-2">
-                    {formatTimeOrDate(conv.lastMessage.sent_at)}
-                  </span>
-                </div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm truncate">
-                  {conv.lastMessage.inbox ? "" : `${t("you")}: `}
-                  {conv.lastMessage.text || conv.lastMessage.name}
-                </p>
-              </div>
-              {/* Unread badge */}
-              {conv.unread > 0 && (
-                <span className="ml-2 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shrink-0">
-                  {conv.unread > 9 ? "9+" : conv.unread}
-                </span>
-              )}
-            </Link>
+              conv={conv}
+              alias={getAlias(conv.station)}
+            />
           ))}
       </div>
 
