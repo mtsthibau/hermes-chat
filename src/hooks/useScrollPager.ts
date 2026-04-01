@@ -37,7 +37,7 @@ interface UseScrollPagerResult<T extends HTMLElement> {
  */
 export function useScrollPager<T extends HTMLElement = HTMLDivElement>({
   totalCount,
-  pageSize = 9,
+  pageSize = 30,
   resetDep,
 }: UseScrollPagerOptions): UseScrollPagerResult<T> {
   const scrollRef = useRef<T>(null);
