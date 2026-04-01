@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import type { Conversation } from "@/lib/conversation";
 import { formatTimeOrDate } from "@/lib/formatting";
 
@@ -12,6 +13,7 @@ interface ConversationItemProps {
 
 export default function ConversationItem({ conv, alias }: ConversationItemProps) {
   const t = useTranslations("home");
+  const locale = useLocale();
   const displayName = alias ?? conv.station;
 
   return (
@@ -38,7 +40,7 @@ export default function ConversationItem({ conv, alias }: ConversationItemProps)
             )}
           </div>
           <span className="text-gray-400 dark:text-gray-500 text-xs shrink-0 ml-2">
-            {formatTimeOrDate(conv.lastMessage.sent_at)}
+            {formatTimeOrDate(conv.lastMessage.sent_at, locale)}
           </span>
         </div>
         <p className="text-gray-500 dark:text-gray-400 text-sm truncate">
@@ -46,13 +48,6 @@ export default function ConversationItem({ conv, alias }: ConversationItemProps)
           {conv.lastMessage.text || conv.lastMessage.name}
         </p>
       </div>
-
-      {/* Unread badge */}
-      {conv.unread > 0 && (
-        <span className="ml-2 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shrink-0">
-          {conv.unread > 9 ? "9+" : conv.unread}
-        </span>
-      )}
     </Link>
   );
 }

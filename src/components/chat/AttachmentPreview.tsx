@@ -5,11 +5,10 @@ import { useTranslations } from "next-intl";
 interface AttachmentPreviewProps {
   file: File;
   pass: string;
-  onPassChange: (pass: string) => void;
   onRemove: () => void;
 }
 
-export default function AttachmentPreview({ file, pass, onPassChange, onRemove }: AttachmentPreviewProps) {
+export default function AttachmentPreview({ file, onRemove }: AttachmentPreviewProps) {
   const t = useTranslations("chat");
 
   return (
@@ -28,13 +27,6 @@ export default function AttachmentPreview({ file, pass, onPassChange, onRemove }
           </svg>
         )}
         <span className="flex-1 truncate text-gray-800 dark:text-gray-200 text-sm">{file.name}</span>
-        <input
-          type="password"
-          value={pass}
-          onChange={(e) => onPassChange(e.target.value)}
-          placeholder={t("passPlaceholder")}
-          className="w-28 bg-white dark:bg-gray-600 text-gray-900 dark:text-white rounded px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-orange-500 border border-gray-300 dark:border-gray-500"
-        />
         <button
           type="button"
           onClick={onRemove}

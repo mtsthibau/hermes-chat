@@ -65,7 +65,6 @@ export default function ChatScreen() {
         <AttachmentPreview
           file={selectedFile}
           pass={pass}
-          onPassChange={setPass}
           onRemove={() => { setSelectedFile(null); setPass(""); }}
         />
       )}
@@ -78,6 +77,8 @@ export default function ChatScreen() {
         hasFile={!!selectedFile}
         station={station}
         inputRef={inputRef}
+        pass={pass}
+        onPassChange={setPass}
       />
     </div>
   );
