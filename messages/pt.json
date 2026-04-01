@@ -67,9 +67,16 @@
     "network": "Rede",
     "piduuardop": "PID UUARDOP",
     "wifiessid": "ESSID Wi-Fi",
-    "na": "N/D"
+    "na": "N/D",
+    "callerTitle": "Chamadas Agendadas",
+    "callerEmpty": "Nenhuma chamada agendada.",
+    "callerEnabled": "Ativo",
+    "callerDisabled": "Inativo",
+    "callerStart": "Início",
+    "callerStop": "Fim",
+    "callerStations": "Estações"
   },
-  "newChat": {
+    "newChat": {
     "title": "Nova conversa",
     "back": "Voltar",
     "selectStation": "Selecione uma estação",

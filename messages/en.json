@@ -81,6 +81,13 @@
     "network": "Network",
     "piduuardop": "UUARDOP PID",
     "wifiessid": "Wi-Fi ESSID",
-    "na": "N/A"
+    "na": "N/A",
+    "callerTitle": "Scheduled Callers",
+    "callerEmpty": "No scheduled callers.",
+    "callerEnabled": "Enabled",
+    "callerDisabled": "Disabled",
+    "callerStart": "Start",
+    "callerStop": "Stop",
+    "callerStations": "Stations"
   }
 }
