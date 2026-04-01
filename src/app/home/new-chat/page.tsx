@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
@@ -76,10 +77,10 @@ export default function NewChatPage() {
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href="/home"
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              aria-label={t("back", { defaultValue: "Back" })}
+              className="text-orange-500 hover:text-orange-400 shrink-0"
+              aria-label={t("back")}
             >
-              く
+              <ChevronLeft className="w-6 h-6" aria-hidden="true" />
             </Link>
             <span className="text-gray-900 dark:text-white font-semibold text-base">
               {t("selectStation")}

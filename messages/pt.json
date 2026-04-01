@@ -49,6 +49,26 @@
     "cancel": "Cancelar",
     "nextSync": "Próxima sincronização em {countdown}"
   },
+  "radioInfo": {
+    "title": "Informações do Rádio",
+    "back": "Voltar",
+    "menuLabel": "Info do rádio",
+    "loading": "Carregando info do rádio…",
+    "loadError": "Falha ao carregar info do rádio.",
+    "status": "Status",
+    "statusOnline": "Online",
+    "statusOffline": "Offline",
+    "nodename": "Nome do nó",
+    "domain": "Domínio",
+    "diskfree": "Disco livre",
+    "gateway": "Gateway",
+    "ip": "Endereços IP",
+    "interfaces": "Interfaces de rede",
+    "network": "Rede",
+    "piduuardop": "PID UUARDOP",
+    "wifiessid": "ESSID Wi-Fi",
+    "na": "N/D"
+  },
   "newChat": {
     "title": "Nova conversa",
     "back": "Voltar",

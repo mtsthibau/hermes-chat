@@ -62,5 +62,25 @@
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
     "toggle": "Toggle theme"
+  },
+  "radioInfo": {
+    "title": "Radio Info",
+    "back": "Back",
+    "menuLabel": "Radio info",
+    "loading": "Loading radio info…",
+    "loadError": "Failed to load radio info.",
+    "status": "Status",
+    "statusOnline": "Online",
+    "statusOffline": "Offline",
+    "nodename": "Node name",
+    "domain": "Domain",
+    "diskfree": "Free disk",
+    "gateway": "Gateway",
+    "ip": "IP addresses",
+    "interfaces": "Network interfaces",
+    "network": "Network",
+    "piduuardop": "UUARDOP PID",
+    "wifiessid": "Wi-Fi ESSID",
+    "na": "N/A"
   }
 }

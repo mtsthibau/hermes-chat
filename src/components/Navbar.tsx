@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/providers/ThemeProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useTranslations } from "next-intl";
 import type { HermesUser } from "@/lib/user";
-import { Globe, LogOut, Menu, Moon, RefreshCw, Sun, X } from "lucide-react";
+import { Globe, LogOut, Menu, Moon, Radio, RefreshCw, Sun, X } from "lucide-react";
 
 interface NavbarProps {
   user?: HermesUser | null;
@@ -22,8 +23,10 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
   const { locale, setLocale } = useLocale();
   const t = useTranslations("home");
   const tTheme = useTranslations("theme");
+  const tRadio = useTranslations("radioInfo");
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -100,6 +103,15 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
                 {t("refresh")}
               </button>
             )}
+
+            {/* Radio Info */}
+            <button
+              onClick={() => { router.push("/home/radio-info"); setOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Radio className="w-4 h-4" aria-hidden="true" />
+              {tRadio("menuLabel")}
+            </button>
 
             {/* Logout */}
             {onLogout && (
