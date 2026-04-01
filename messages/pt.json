@@ -37,6 +37,10 @@
     "passPlaceholder": "Senha (opcional)",
     "deleteMessage": "Excluir mensagem",
     "deleteError": "Falha ao excluir mensagem.",
+    "confirmDeleteTitle": "Excluir mensagem?",
+    "confirmDeleteMessage": "Esta ação não pode ser desfeita.",
+    "confirm": "Excluir",
+    "cancel": "Cancelar",
     "nextSync": "Próxima sincronização em {countdown}"
   },
   "newChat": {

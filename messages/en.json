@@ -37,6 +37,10 @@
     "passPlaceholder": "Password (optional)",
     "deleteMessage": "Delete message",
     "deleteError": "Failed to delete message.",
+    "confirmDeleteTitle": "Delete message?",
+    "confirmDeleteMessage": "This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
     "nextSync": "Next sync in {countdown}"
   },
   "newChat": {
