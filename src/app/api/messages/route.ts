@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { hermesGet, hermesPost, hermesDelete } from '@/lib/hermesApi';
 import type { Message } from '@/lib/types';
 
-/** Strip optional @domain suffix for comparison purposes. */
+/**
+ * Normalize a station address to its bare identifier for comparison.
+ * Handles email-style (station@domain) and DNS-style (station.domain.tld).
+ */
 function bare(s: string) {
-  return s.includes('@') ? s.split('@')[0].toLowerCase() : s.toLowerCase();
+  const lower = s.trim().toLowerCase();
+  const noAt = lower.includes('@') ? lower.split('@')[0] : lower;
+  return noAt.split('.')[0];
 }
 
 export async function GET(request: NextRequest) {

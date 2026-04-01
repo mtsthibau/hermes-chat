@@ -13,7 +13,7 @@ interface UseChatDataResult {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-export function useChatData(station: string): UseChatDataResult {
+export function useChatData(station: string, aliasMap: Map<string, string> = new Map()): UseChatDataResult {
   const t = useTranslations("chat");
   const [messages, setMessages] = useState<Message[]>([]);
   const [sentIds, setSentIds] = useState<Set<number>>(new Set());
@@ -30,7 +30,7 @@ export function useChatData(station: string): UseChatDataResult {
       ]);
 
       const allMessages: Message[] = msgRes.ok ? await msgRes.json() : [];
-      setMessages(filterConversation(allMessages, station));
+      setMessages(filterConversation(allMessages, station, aliasMap));
 
       if (sentRes.ok && uulsRes.ok) {
         const sentData: unknown = await sentRes.json();
@@ -64,7 +64,7 @@ export function useChatData(station: string): UseChatDataResult {
     } finally {
       setLoading(false);
     }
-  }, [station, t]);
+  }, [station, t, aliasMap]);
 
   useEffect(() => {
     fetchMessages();

@@ -19,7 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [station, setStation] = useState<string | null>(null);
-  const { getAlias } = useStationAlias();
+  const { getAlias, aliasMap } = useStationAlias();
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -51,7 +51,7 @@ export default function Home() {
     window.location.replace("/");
   }
 
-  const allConversations = buildConversations(conversations);
+  const allConversations = buildConversations(conversations, aliasMap);
   const filtered = allConversations.filter((c) => {
     const alias = getAlias(c.station) ?? c.station;
     const q = search.toLowerCase();

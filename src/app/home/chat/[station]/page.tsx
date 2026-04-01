@@ -19,10 +19,11 @@ export default function ChatScreen() {
   const params = useParams();
   const station = decodeURIComponent(params.station as string);
 
-  const { messages, sentIds, syncedIds, loading, error: fetchError, fetchMessages, setMessages } = useChatData(station);
   const orig = useNodeInfo();
-  const { getAlias } = useStationAlias();
+  const { getAlias, aliasMap } = useStationAlias();
   const alias = getAlias(station);
+ 
+  const { messages, sentIds, syncedIds, loading, error: fetchError, fetchMessages, setMessages } = useChatData(station, aliasMap);
 
   const [text, setText] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

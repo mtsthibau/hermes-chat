@@ -31,9 +31,6 @@ export default function ChatHeader({ station, alias, onRefresh }: ChatHeaderProp
             <p className="text-gray-900 dark:text-white font-semibold truncate">
               {alias ?? station}
             </p>
-            {alias && (
-              <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{station}</p>
-            )}
           </div>
         </div>
       }
