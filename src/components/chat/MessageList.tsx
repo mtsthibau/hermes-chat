@@ -36,7 +36,7 @@ export default function MessageList({
     return (
         <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col">
             {/* spacer pushes messages to the bottom when they don't fill the viewport */}
-            {loadingMore && <LoadingSpinner className="py-2" />}
+            {loadingMore  && <LoadingSpinner className="py-10" />}
             {loading && <LoadingSpinner className="py-10" />}   
             <div className="flex-1" />
             <div className="px-4 py-4 space-y-1">

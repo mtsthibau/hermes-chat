@@ -72,7 +72,7 @@ export default function Home() {
 
       {/* List */}
       <div className="flex-1 overflow-y-auto">
-        {loading && <LoadingSpinner className="h-32" />}
+        {loading && <LoadingSpinner className="py-10" />}
         {error && (
           <div className="flex items-center justify-center h-32 text-red-500 dark:text-red-400 text-sm">{error}</div>
         )}
