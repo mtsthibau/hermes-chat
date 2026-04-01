@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import NewChatFab from "@/components/NewChatFab";
 import SearchInput from "@/components/ui/SearchInput";
 import ConversationItem from "@/components/home/ConversationItem";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function Home() {
   const user = useAuthGuard();
@@ -71,11 +72,7 @@ export default function Home() {
 
       {/* List */}
       <div className="flex-1 overflow-y-auto">
-        {loading && (
-          <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
-            {t("loading")}
-          </div>
-        )}
+        {loading && <LoadingSpinner className="h-32" />}
         {error && (
           <div className="flex items-center justify-center h-32 text-red-500 dark:text-red-400 text-sm">{error}</div>
         )}

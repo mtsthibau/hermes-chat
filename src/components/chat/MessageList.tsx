@@ -6,6 +6,7 @@ import type { Message } from "@/lib/message";
 import { isSameDay } from "@/lib/formatting";
 import DateDivider from "./DateDivider";
 import MessageBubble from "./MessageBubble";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 interface MessageListProps {
   messages: Message[];
@@ -33,11 +34,7 @@ export default function MessageList({
 
   return (
     <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-      {loading && (
-        <div className="flex justify-center text-gray-500 dark:text-gray-400 py-10">
-          {t("loading")}
-        </div>
-      )}
+      {loading && <LoadingSpinner className="py-10" />}
       {!loading && messages.length === 0 && (
         <div className="flex justify-center text-gray-400 dark:text-gray-500 text-sm py-10">
           {t("noMessages")}

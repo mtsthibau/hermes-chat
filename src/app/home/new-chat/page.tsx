@@ -7,6 +7,7 @@ import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
 import SearchInput from "@/components/ui/SearchInput";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import type { Message } from "@/lib/message";
 import { buildConversations, stationId, canonicalize } from "@/lib/conversation";
 
@@ -95,11 +96,7 @@ export default function NewChatPage() {
       />
 
       <div className="flex-1 overflow-y-auto">
-        {loading && (
-          <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
-            {t("loading")}
-          </div>
-        )}
+        {loading && <LoadingSpinner className="h-32" />}
         {!loading && filtered.length === 0 && (
           <div className="flex items-center justify-center h-32 text-gray-400 dark:text-gray-500 text-sm">
             {t("noStations")}
