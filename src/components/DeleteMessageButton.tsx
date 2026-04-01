@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { Trash2 } from "lucide-react";
 
 interface DeleteMessageButtonProps {
   messageId: number;
@@ -47,9 +48,7 @@ export default function DeleteMessageButton({ messageId, onDeleted, onError, lab
         className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500 disabled:opacity-30 mb-1 shrink-0"
         aria-label={label}
       >
-        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-          <path d="M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3H9zm0 5h2v9H9V8zm4 0h2v9h-2V8z" />
-        </svg>
+        <Trash2 className="w-4 h-4" aria-hidden="true" />
       </button>
       <ConfirmDialog
         open={confirming}

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Eye, EyeOff, Lock, Paperclip, Send, X } from "lucide-react";
 
 interface MessageInputProps {
   text: string;
@@ -72,22 +73,18 @@ export default function MessageInput({
             aria-label={t(passVisible ? "hidePass" : "showPass")}
           >
             {passVisible ? (
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
-                <path d="M11.83 9 15 12.16V12a3 3 0 0 0-3-3h-.17m-4.3.8 1.55 1.55A4.9 4.9 0 0 0 7 12c0 2.76 2.24 5 5 5a4.9 4.9 0 0 0 .65-.06l1.55 1.55C13.45 18.8 12.74 19 12 19c-3.87 0-7-3.13-7-7 0-.74.2-1.45.53-2.09M2 4.27l2.28 2.28.46.46A10.95 10.95 0 0 0 2 12c1.73 4.39 6 7.5 10.5 7.5 1.55 0 3.03-.3 4.38-.84l.43.42L19.73 22 21 20.73 3.27 3 2 4.27m10.5 7.5-3.5-3.5c.12-.02.24-.02.36-.02a3.5 3.5 0 0 1 3.5 3.5c0 .12 0 .24-.02.36L12.5 11.77z" />
-              </svg>
+              <EyeOff className="w-5 h-5" aria-hidden="true" />
             ) : (
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
-                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-              </svg>
+              <Eye className="w-5 h-5" aria-hidden="true" />
             )}
           </button>
           <button
             type="button"
             onClick={handleRemovePass}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none px-1"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
             aria-label={t("removePass")}
           >
-            ×
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       )}
@@ -111,9 +108,7 @@ export default function MessageInput({
           className="text-gray-400 hover:text-orange-500 transition-colors disabled:opacity-50 p-1"
           aria-label={t("attachFile")}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 17.41a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-          </svg>
+          <Paperclip className="w-5 h-5" aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -122,9 +117,7 @@ export default function MessageInput({
           className={`transition-colors disabled:opacity-50 p-1 ${pass || showPass ? "text-orange-500" : "text-gray-400 hover:text-orange-500"}`}
           aria-label={t("togglePass")}
         >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
-            <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
-          </svg>
+          <Lock className="w-5 h-5" aria-hidden="true" />
         </button>
         <input
           ref={inputRef}
@@ -141,9 +134,7 @@ export default function MessageInput({
           className="w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center text-white shrink-0 transition-colors"
           aria-label={t("send")}
         >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 rotate-120">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          </svg>
+          <Send className="w-5 h-5" aria-hidden="true" />
         </button>
       </form>
     </div>

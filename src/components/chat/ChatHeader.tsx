@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
+import { ChevronLeft } from "lucide-react";
 
 interface ChatHeaderProps {
   station: string;
@@ -19,10 +20,10 @@ export default function ChatHeader({ station, alias, onRefresh }: ChatHeaderProp
         <div className="flex items-center gap-3 min-w-0">
           <Link
             href="/home"
-            className="text-orange-500 hover:text-orange-400 text-xl leading-none shrink-0"
+            className="text-orange-500 hover:text-orange-400 shrink-0"
             aria-label={t("back")}
           >
-            く
+            <ChevronLeft className="w-6 h-6" aria-hidden="true" />
           </Link>
           <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold uppercase shrink-0">
             {(alias ?? station)[0]}

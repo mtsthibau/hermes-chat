@@ -3,6 +3,7 @@ import type { Message } from "@/lib/message";
 import DeleteMessageButton from "@/components/DeleteMessageButton";
 import DoubleCheck from "@/components/DoubleCheck";
 import FileAttachment from "./FileAttachment";
+import { Lock } from "lucide-react";
 
 interface MessageBubbleProps {
   msg: Message;
@@ -63,7 +64,7 @@ export default function MessageBubble({
 
         <p className={`text-xs mt-1 opacity-60 flex items-center gap-1 ${isMine ? "justify-end" : "justify-start"}`}>
           <span>{formatTime(msg.sent_at)}</span>
-          {msg.secure && <span>🔒</span>}
+          {msg.secure && <Lock className="w-3 h-3" aria-hidden="true" />}
           {isMine && sentIds.has(msg.id) && (
             <DoubleCheck synced={syncedIds.has(msg.id)} />
           )}

@@ -6,6 +6,7 @@ import { useTheme } from "@/providers/ThemeProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 import { useTranslations } from "next-intl";
 import type { HermesUser } from "@/lib/user";
+import { Globe, LogOut, Menu, Moon, RefreshCw, Sun, X } from "lucide-react";
 
 interface NavbarProps {
   user?: HermesUser | null;
@@ -53,20 +54,7 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
           aria-expanded={open}
           className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            aria-hidden="true"
-          >
-            {open ? (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          {open ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
         </button>
 
         {open && (
@@ -89,7 +77,7 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
               onClick={() => { toggle(); setOpen(false); }}
               className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
-              <span className="text-base" aria-hidden="true">{theme === "dark" ? "☀" : "⏾"}</span>
+              {theme === "dark" ? <Sun className="w-4 h-4" aria-hidden="true" /> : <Moon className="w-4 h-4" aria-hidden="true" />}
               {theme === "dark" ? tTheme("lightMode") : tTheme("darkMode")}
             </button>
 
@@ -98,7 +86,7 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
               onClick={() => { setLocale(locale === "pt" ? "en" : "pt"); setOpen(false); }}
               className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
-              <span className="text-base" aria-hidden="true">友</span>
+              <Globe className="w-4 h-4" aria-hidden="true" />
               {locale === "pt" ? "English" : "Português"}
             </button>
 
@@ -108,7 +96,7 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
                 onClick={() => { onRefresh(); setOpen(false); }}
                 className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                <span className="text-base" aria-hidden="true">↻</span>
+                <RefreshCw className="w-4 h-4" aria-hidden="true" />
                 {t("refresh")}
               </button>
             )}
@@ -121,7 +109,7 @@ export default function Navbar({ user, station, onRefresh, onLogout, left }: Nav
                   onClick={() => { onLogout(); setOpen(false); }}
                   className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
-                  <span className="text-base" aria-hidden="true">⍈</span>
+                  <LogOut className="w-4 h-4" aria-hidden="true" />
                   {t("logout")}
                 </button>
               </>
