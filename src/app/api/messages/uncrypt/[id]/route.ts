@@ -8,6 +8,6 @@ export async function POST(
   const cookie = request.headers.get('cookie') ?? undefined;
   const { id } = await params;
   const body = await request.json();
-  const { data, status } = await hermesPost('message/uncrypt/', { id, ...body }, cookie);
+  const { data, status } = await hermesPost(`message/uncrypt/${id}`, body, cookie);
   return NextResponse.json(data, { status });
 }

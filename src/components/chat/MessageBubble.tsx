@@ -30,6 +30,7 @@ export default function MessageBubble({
     const isAudio = !!(msg.file && msg.fileid && msg.mimetype?.startsWith("audio/"));
     const [dialogOpen, setDialogOpen] = useState(false);
     const [password, setPassword] = useState<string | null>(null);
+    const [text, setText] = useState<string | null>(null);
     const [verifying, setVerifying] = useState(false);
     const [wrongPassword, setWrongPassword] = useState(false);
     const unlocked = !msg.secure || password !== null;
@@ -37,7 +38,7 @@ export default function MessageBubble({
     const handlePasswordSubmit = useCallback(async (pw: string) => {
         setVerifying(true);
         try {
-            const res = await fetch(`/api/message/uncrypt/${msg.id}`, {
+            const res = await fetch(`/api/messages/uncrypt/${msg.id}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ pass: pw }),
@@ -48,6 +49,8 @@ export default function MessageBubble({
             }
             setWrongPassword(false);
             setPassword(pw);
+            const data = await res.json();
+            setText(data.message);
             setDialogOpen(false);
         } catch {
             setWrongPassword(true);
@@ -72,7 +75,7 @@ export default function MessageBubble({
                         : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white rounded-bl-sm"
                     }`}
             >
-               
+                {text && <p className="text-md opacity-100 whitespace-pre-wrap break-words">{text}</p>}
 
                 {!unlocked ? (
                     <button
@@ -90,12 +93,11 @@ export default function MessageBubble({
                         file={msg.file}
                         fileid={msg.fileid}
                         mimetype={msg.mimetype}
-                        text={msg.text}
+                        text={text ?? msg.text}
                         password={password ?? undefined}
                     />
                 ) : (<div>
-                     <p className="text-md opacity-100 truncate">{msg.name}</p>
-                    <p className="text-md opacity-100 whitespace-pre-wrap break-words">{msg.text}</p>
+                    <p className="text-md opacity-100 whitespace-pre-wrap break-words">{text ?? msg.text}</p>
                     </div>
                 )}
 
