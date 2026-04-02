@@ -57,6 +57,70 @@ export const hermesPost = (path: string, body: unknown, cookie?: string) =>
   hermesRequest(path, 'POST', JSON.stringify(body), cookie);
 export const hermesDelete = (path: string, cookie?: string) => hermesRequest(path, 'DELETE', undefined, cookie);
 
+interface MultipartFile {
+  fieldName: string;
+  filename: string;
+  mimetype: string;
+  buffer: Buffer;
+}
+
+export function hermesPostMultipart(
+  path: string,
+  fields: Array<[string, string]>,
+  file: MultipartFile,
+  cookie?: string,
+): Promise<{ data: unknown; status: number }> {
+  const url = new URL(path, getBase());
+  const boundary = `----HermesBoundary${Date.now().toString(16)}`;
+
+  const parts: Buffer[] = [];
+  for (const [name, value] of fields) {
+    parts.push(Buffer.from(
+      `--${boundary}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`,
+    ));
+  }
+  parts.push(Buffer.from(
+    `--${boundary}\r\nContent-Disposition: form-data; name="${file.fieldName}"; filename="${file.filename}"\r\nContent-Type: ${file.mimetype}\r\n\r\n`,
+  ));
+  parts.push(file.buffer);
+  parts.push(Buffer.from(`\r\n--${boundary}--\r\n`));
+
+  const body = Buffer.concat(parts);
+
+  return new Promise((resolve) => {
+    const headers: Record<string, string | number> = {
+      'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      'Content-Length': body.byteLength,
+    };
+    if (cookie) headers['Cookie'] = cookie;
+
+    const req = https.request(
+      {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname + url.search,
+        method: 'POST',
+        headers,
+        agent: insecureAgent,
+      },
+      (res) => {
+        let raw = '';
+        res.on('data', (chunk: string) => { raw += chunk; });
+        res.on('end', () => {
+          try {
+            resolve({ data: JSON.parse(raw), status: res.statusCode ?? 200 });
+          } catch {
+            resolve({ data: { message: 'Invalid API response', raw: raw.slice(0, 400) }, status: 502 });
+          }
+        });
+      },
+    );
+    req.on('error', () => resolve({ data: { message: 'Could not reach the Hermes API.' }, status: 503 }));
+    req.write(body);
+    req.end();
+  });
+}
+
 export function hermesGetBuffer(
   path: string,
   cookie?: string,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Clock } from "lucide-react";
 
 interface ScheduleData {
   next?: string;      // ISO timestamp of next sync
@@ -62,10 +63,7 @@ export default function NextSyncBadge() {
   return (
     <div className="flex justify-center px-4 pt-2 shrink-0">
       <span className="inline-flex items-center gap-1.5 bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 text-xs font-medium px-3 py-1 rounded-full">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5 shrink-0" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
+        <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
         {t("nextSync", { countdown })}
       </span>
     </div>

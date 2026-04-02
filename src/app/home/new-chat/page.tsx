@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
+import SearchInput from "@/components/ui/SearchInput";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import type { Message } from "@/lib/message";
-import { buildConversations } from "@/lib/conversation";
+import { buildConversations, stationId, canonicalize } from "@/lib/conversation";
 
 interface Station {
   name: string;
@@ -21,23 +24,28 @@ export default function NewChatPage() {
 
   const [stations, setStations] = useState<Station[]>([]);
   const [existingStations, setExistingStations] = useState<Set<string>>(new Set());
+  const [aliasMap, setAliasMap] = useState<Map<string, string>>(new Map());
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [stationsRes, inboxRes, sentRes] = await Promise.all([
+      const [stationsRes, messagesRes] = await Promise.all([
         fetch("/api/stations"),
-        fetch("/api/messages/inbox"),
-        fetch("/api/messages/sent"),
+        fetch("/api/messages"),
       ]);
 
       const stationList: Station[] = stationsRes.ok ? await stationsRes.json() : [];
-      const inbox: Message[] = inboxRes.ok ? await inboxRes.json() : [];
-      const sent: Message[] = sentRes.ok ? await sentRes.json() : [];
+      const messages: Message[] = messagesRes.ok ? await messagesRes.json() : [];
 
-      const conversations = buildConversations([...inbox, ...sent]);
+      // Build alias map so buildConversations collapses callsign + alias to one entry
+      const newAliasMap = new Map<string, string>();
+      for (const s of stationList) if (s.alias) newAliasMap.set(stationId(s.name), s.alias);
+      setAliasMap(newAliasMap);
+
+      const conversations = buildConversations(messages, newAliasMap);
+      // c.station is now the canonical alias (e.g. "estacao3" for PU2UIT-3)
       setExistingStations(new Set(conversations.map((c) => c.station)));
       setStations(Array.isArray(stationList) ? stationList : []);
     } finally {
@@ -50,13 +58,16 @@ export default function NewChatPage() {
   }, [loadData]);
 
   const filtered = stations.filter((s) => {
-    if (existingStations.has(s.name)) return false;
+    // Resolve the station to its canonical alias (same logic as buildConversations)
+    if (existingStations.has(canonicalize(s.name, aliasMap))) return false;
     const q = search.toLowerCase();
     return s.alias.toLowerCase().includes(q) || s.name.toLowerCase().includes(q);
   });
 
   function handleSelect(name: string) {
-    router.push(`/home/chat/${encodeURIComponent(name)}`);
+    // Navigate using the alias so the URL matches the conversation list
+    const alias = aliasMap.get(stationId(name));
+    router.push(`/home/chat/${encodeURIComponent(alias ?? name)}`);
   }
 
   return (
@@ -66,10 +77,10 @@ export default function NewChatPage() {
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href="/home"
-              className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              aria-label={t("back", { defaultValue: "Back" })}
+              className="text-orange-500 hover:text-orange-400 shrink-0"
+              aria-label={t("back")}
             >
-              く
+              <ChevronLeft className="w-6 h-6" aria-hidden="true" />
             </Link>
             <span className="text-gray-900 dark:text-white font-semibold text-base">
               {t("selectStation")}
@@ -78,23 +89,15 @@ export default function NewChatPage() {
         }
       />
 
-      <div className="px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shrink-0">
-        <input
-          autoFocus
-          type="text"
-          placeholder={t("stationSearchPlaceholder")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-500"
-        />
-      </div>
+      <SearchInput
+        autoFocus
+        value={search}
+        onChange={setSearch}
+        placeholder={t("stationSearchPlaceholder")}
+      />
 
       <div className="flex-1 overflow-y-auto">
-        {loading && (
-          <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
-            {t("loading")}
-          </div>
-        )}
+        {loading && <LoadingSpinner className="py-10" />}
         {!loading && filtered.length === 0 && (
           <div className="flex items-center justify-center h-32 text-gray-400 dark:text-gray-500 text-sm">
             {t("noStations")}
@@ -114,11 +117,6 @@ export default function NewChatPage() {
                 <span className="text-gray-900 dark:text-white font-medium truncate block">
                   {s.alias || s.name}
                 </span>
-                {s.alias && (
-                  <span className="text-xs text-gray-400 dark:text-gray-500 truncate block">
-                    {s.name}
-                  </span>
-                )}
               </div>
             </button>
           ))}
