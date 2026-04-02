@@ -7,6 +7,8 @@ import pt from "../../messages/pt.json";
 
 type Locale = "en" | "pt";
 
+const DEFAULT_TIME_ZONE = process.env.NEXT_PUBLIC_APP_TIME_ZONE ?? "UTC";
+
 const messages: Record<Locale, typeof pt> = { en, pt };
 
 interface LocaleContextValue {
@@ -42,7 +44,11 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale }}>
-      <NextIntlClientProvider locale={locale} messages={messages[locale]}>
+      <NextIntlClientProvider
+        locale={locale}
+        messages={messages[locale]}
+        timeZone={DEFAULT_TIME_ZONE}
+      >
         {children}
       </NextIntlClientProvider>
     </LocaleContext.Provider>
