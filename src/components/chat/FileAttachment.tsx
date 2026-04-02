@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { FileText } from "lucide-react";
+import { useState } from "react";
 
 interface FileAttachmentProps {
   file: string;
@@ -13,17 +14,24 @@ export default function FileAttachment({ file, fileid, mimetype, text, password 
   const t = useTranslations("chat");
   const base = `/api/files/${encodeURIComponent(fileid)}`;
   const fileUrl = password ? `${base}?pass=${encodeURIComponent(password)}` : base;
+  const [loaded, setLoaded] = useState(false);
 
   if (mimetype.startsWith("image/")) {
     return (
       <a href={fileUrl} target="_blank" rel="noopener noreferrer" aria-label={t("openFile")}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={fileUrl}
-          alt={file}
-          className="max-w-full rounded-lg mb-1"
-          style={{ maxHeight: 200 }}
-        />
+        <div className="relative rounded-lg mb-1 overflow-hidden" style={{ maxHeight: 200, minHeight: loaded ? undefined : 120, minWidth: 140 }}>
+          {!loaded && (
+            <div className="absolute inset-0 bg-gray-300 dark:bg-gray-600 animate-pulse rounded-lg" />
+          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={fileUrl}
+            alt={file}
+            className={`max-w-full rounded-lg transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ maxHeight: 200 }}
+            onLoad={() => setLoaded(true)}
+          />
+        </div>
         <p className="text-xs opacity-70 truncate">{file}</p>
         <p className="text-md opacity-100 truncate">{text}</p>
       </a>
