@@ -72,6 +72,7 @@ export default function ChatScreen() {
         text={text}
         onTextChange={setText}
         onFileSelect={setSelectedFile}
+        onFileError={setError}
         onSubmit={handleSubmit}
         sending={sending}
         hasFile={!!selectedFile}

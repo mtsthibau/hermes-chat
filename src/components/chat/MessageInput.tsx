@@ -8,6 +8,7 @@ interface MessageInputProps {
   text: string;
   onTextChange: (text: string) => void;
   onFileSelect: (file: File) => void;
+  onFileError?: (msg: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   sending: boolean;
   hasFile: boolean;
@@ -21,6 +22,7 @@ export default function MessageInput({
   text,
   onTextChange,
   onFileSelect,
+  onFileError,
   onSubmit,
   sending,
   hasFile,
@@ -95,10 +97,16 @@ export default function MessageInput({
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) {
-              onFileSelect(f);
-              onTextChange("");
+            if (!f) return;
+            const isMedia = f.type.startsWith("image/") || f.type.startsWith("audio/");
+            const maxBytes = isMedia ? 30 * 1024 * 1024 : 20 * 1024;
+            if (f.size > maxBytes) {
+              if (fileInputRef.current) fileInputRef.current.value = "";
+              onFileError?.(t(isMedia ? "fileTooLargeMedia" : "fileTooLargeOther"));
+              return;
             }
+            onFileSelect(f);
+            onTextChange("");
           }}
         />
         <button

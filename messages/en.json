@@ -34,6 +34,8 @@
     "removeFile": "Remove file",
     "openFile": "Open file",
     "fileSendError": "Failed to send file.",
+    "fileTooLargeMedia": "File too large. Images and audio files must be under 31.45 MB.",
+    "fileTooLargeOther": "File too large. Other file types must be under 20.48 kB.",
     "passPlaceholder": "Password (optional)",
     "confirmPassPlaceholder": "Confirm password",
     "togglePass": "Set password",
