@@ -14,6 +14,28 @@ interface UseSendMessageOptions {
   setError: (msg: string | null) => void;
 }
 
+async function uploadFile(file: File, pass: string): Promise<{ id: string; filename?: string; mimetype?: string }> {
+  const form = new FormData();
+  form.append("fileup", file);
+  if (pass) form.append("pass", pass);
+  const res = await fetch("/api/ufile", { method: "POST", body: form });
+  const data = await res.json();
+  if (!res.ok || !data.id) throw new Error(data?.message ?? "");
+  return data;
+}
+
+async function postMessage(body: Record<string, unknown>): Promise<void> {
+  const res = await fetch("/api/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data?.message ?? "");
+  }
+}
+
 export function useSendMessage({ station, onSuccess, setError }: UseSendMessageOptions) {
   const t = useTranslations("chat");
   const [sending, setSending] = useState(false);
@@ -25,75 +47,38 @@ export function useSendMessage({ station, onSuccess, setError }: UseSendMessageO
       setError(null);
 
       try {
+        const base = {
+          orig,
+          dest: [station],
+          secure: !!pass,
+          pass,
+          sent_at: new Date().toISOString(),
+        };
+
         if (file) {
-          const uploadForm = new FormData();
-          uploadForm.append("fileup", file);
-          if (pass) uploadForm.append("pass", pass);
-
-          const uploadRes = await fetch("/api/ufile", { method: "POST", body: uploadForm });
-          if (!uploadRes.ok) {
-            const data = await uploadRes.json();
-            setError(data?.message ?? t("fileSendError"));
-            return;
-          }
-
-          const uploadData = await uploadRes.json();
-          const fileid: string = uploadData.id;
-          if (!fileid) { setError(t("fileSendError")); return; }
-
-          const msgRes = await fetch("/api/messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orig,
-              dest: [station],
-              name: text.trim() || file.name,
-              text: null,
-              file: uploadData.filename ?? file.name,
-              fileid,
-              mimetype: uploadData.mimetype ?? file.type ?? "application/octet-stream",
-              secure: !!pass,
-              pass: pass,
-              sent_at: new Date().toISOString(),
-            }),
+          const upload = await uploadFile(file, pass);
+          await postMessage({
+            ...base,
+            name: text.trim() || file.name,
+            text: text.trim() || file.name,
+            file: upload.filename ?? file.name,
+            fileid: upload.id,
+            mimetype: upload.mimetype ?? file.type ?? "application/octet-stream",
           });
-
-          if (!msgRes.ok) {
-            const data = await msgRes.json();
-            setError(data?.message ?? t("fileSendError"));
-            return;
-          }
-
-          await onSuccess();
-          return;
-        }
-
-        const trimmed = text.trim();
-        if (!trimmed) return;
-
-        const res = await fetch("/api/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orig,
-            dest: [station],
-            name: trimmed.length > 60 ? trimmed.substring(0, 57) + "..." : trimmed,
+        } else {
+          const trimmed = text.trim();
+          if (!trimmed) return;
+          await postMessage({
+            ...base,
+            name: trimmed.length > 60 ? `${trimmed.substring(0, 57)}...` : trimmed,
             text: trimmed,
-            secure: !!pass,
-            pass: pass,
-            sent_at: new Date().toISOString(),
-          }),
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          setError(data?.message ?? t("sendError"));
-          return;
+          });
         }
 
         await onSuccess();
-      } catch {
-        setError(t("connectionError"));
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "";
+        setError(msg || t(file ? "fileSendError" : "connectionError"));
       } finally {
         setSending(false);
       }
