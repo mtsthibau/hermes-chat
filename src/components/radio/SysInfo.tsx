@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import InfoList from "@/components/radio/InfoList";
 
 interface SysStatus {
@@ -21,7 +20,6 @@ interface SysStatus {
 export default function SysInfo() {
     const t = useTranslations("radioInfo");
     const [info, setInfo] = useState<SysStatus | null>(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -29,10 +27,8 @@ export default function SysInfo() {
             .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
             .then((data: SysStatus) => setInfo(data))
             .catch(() => setError(t("loadError")))
-            .finally(() => setLoading(false));
     }, [t]);
 
-    if (loading) return <LoadingSpinner className="py-10" />;
 
     if (error) {
         return (

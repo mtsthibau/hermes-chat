@@ -8,18 +8,20 @@ import SysInfo from "@/components/radio/SysInfo";
 import CallerList, { type CallerEntry } from "@/components/radio/CallerList";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function RadioInfoPage() {
     useAuthGuard();
     const t = useTranslations("radioInfo");
-
+    const [loading, setLoading] = useState(true);
     const [callers, setCallers] = useState<CallerEntry[]>([]);
 
     useEffect(() => {
         fetch("/api/caller")
             .then((r) => (r.ok ? r.json() : []))
             .then((data: CallerEntry[]) => setCallers(Array.isArray(data) ? data : []))
-            .catch(() => {});
+            .catch(() => { })
+            .finally(() => setLoading(false));
     }, []);
 
     const left = (
@@ -37,15 +39,18 @@ export default function RadioInfoPage() {
         </div>
     );
 
+
+
     return (
         <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
             <Navbar left={left} />
-
+            {loading && <LoadingSpinner className="py-10" />}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 <SysInfo />
-                <CallerList callers={callers} />
+                {!loading && <CallerList callers={callers}/>}
             </div>
         </div>
     );
 }
+
 
