@@ -52,6 +52,8 @@ export function useSendMessage({ station, onSuccess, setError }: UseSendMessageO
               file: uploadData.filename ?? file.name,
               fileid,
               mimetype: uploadData.mimetype ?? file.type ?? "application/octet-stream",
+              secure: !!pass,
+              pass: pass,
               sent_at: new Date().toISOString(),
             }),
           });
@@ -77,6 +79,8 @@ export function useSendMessage({ station, onSuccess, setError }: UseSendMessageO
             dest: [station],
             name: trimmed.length > 60 ? trimmed.substring(0, 57) + "..." : trimmed,
             text: trimmed,
+            secure: !!pass,
+            pass: pass,
             sent_at: new Date().toISOString(),
           }),
         });

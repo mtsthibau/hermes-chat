@@ -49,6 +49,11 @@
     "confirmDeleteMessage": "This action cannot be undone.",
     "confirm": "Delete",
     "cancel": "Cancel",
+    "lockedMessage": "Password-protected message",
+    "unlockMessage": "Tap to unlock",
+    "enterPassword": "Enter password to unlock",
+    "unlock": "Unlock",
+    "wrongPassword": "Wrong password, please try again.",
     "nextSync": "Next sync in {countdown}"
   },
   "newChat": {

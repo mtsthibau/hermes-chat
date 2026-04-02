@@ -6,15 +6,17 @@ interface FileAttachmentProps {
   fileid: string;
   mimetype: string;
   text: string | null;
+  password?: string;
 }
 
 function getHermesBase(): string {
   return (process.env.NEXT_PUBLIC_HERMES_API_URL ?? "").replace(/\/$/, "") + "/api";
 }
 
-export default function FileAttachment({ file, fileid, mimetype, text }: FileAttachmentProps) {
+export default function FileAttachment({ file, fileid, mimetype, text, password }: FileAttachmentProps) {
   const t = useTranslations("chat");
-  const fileUrl = `${getHermesBase()}/file/${fileid}`;
+  const base = `/api/files/${encodeURIComponent(fileid)}`;
+  const fileUrl = password ? `${base}?pass=${encodeURIComponent(password)}` : base;
 
   if (mimetype.startsWith("image/")) {
     return (

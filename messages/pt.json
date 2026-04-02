@@ -49,6 +49,11 @@
     "confirmDeleteMessage": "Esta ação não pode ser desfeita.",
     "confirm": "Excluir",
     "cancel": "Cancelar",
+    "lockedMessage": "Mensagem protegida por senha",
+    "unlockMessage": "Toque para desbloquear",
+    "enterPassword": "Digite a senha para desbloquear",
+    "unlock": "Desbloquear",
+    "wrongPassword": "Senha incorreta, tente novamente.",
     "nextSync": "Próxima sincronização em {countdown}"
   },
   "radioInfo": {
