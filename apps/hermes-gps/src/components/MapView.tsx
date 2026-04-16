@@ -5,7 +5,7 @@ import maplibregl, { type StyleSpecification } from "maplibre-gl";
 import { Protocol } from "pmtiles";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-// Geographic center of Brazil
+// Geographic center of Brazil — MapLibre uses [longitude, latitude]
 const BRAZIL_CENTER: [number, number] = [-51.925, -14.235];
 const BRAZIL_ZOOM = 4;
 
@@ -274,10 +274,10 @@ export default function MapView({ lat, lon, dark, onTileError }: MapViewProps) {
             <p className="text-gray-500 dark:text-gray-400 text-xs">
               Run{" "}
               <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">
-                npx pmtiles extract https://build.protomaps.com/LATEST.pmtiles brazil.pmtiles --bbox=-73.98,-33.75,-34.79,5.27
+                npm run download-tiles
               </code>{" "}
-              then place <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">brazil.pmtiles</code> in{" "}
-              <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">apps/hermes-gps/public/</code>.
+              from <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">apps/hermes-gps/</code> to download the tile file.
+              It will be saved automatically and skipped on future runs.
             </p>
           </div>
         </div>
