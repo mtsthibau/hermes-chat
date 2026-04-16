@@ -23,6 +23,9 @@ coverage/
 # turbo
 .turbo/
 
+# large tile archives — download separately
+*.pmtiles
+
 # misc
 .DS_Store
 *.pem

@@ -78,57 +78,56 @@ export default function GpsPage() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Full-screen map */}
-      <MapView lat={lat} lon={lon} />
-
-      {/* ── Top bar ── */}
-      <header className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-black/10 dark:border-white/10">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-5 h-5 text-emerald-500" />
-          <span className="font-semibold tracking-wide text-sm">HERMES GPS</span>
-        </div>
-
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setLocale(locale === "en" ? "pt" : "en")}
-            aria-label={t("toggleLocale")}
-            className="px-2 py-1 rounded-lg text-xs font-medium hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-          >
-            {locale === "en" ? "PT" : "EN"}
-          </button>
-          <button
-            onClick={toggle}
-            aria-label={t("toggleTheme")}
-            className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-          >
-            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-        </div>
-      </header>
+      <MapView lat={lat} lon={lon} dark={theme === "dark"} />
 
       {/* ── Bottom panel ── */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-t border-black/10 dark:border-white/10 px-4 py-3">
-        {/* Error */}
-        {error && (
-          <p className="text-xs text-red-600 dark:text-red-400 mb-2">{error}</p>
-        )}
+      <div className="absolute bottom-0 left-0 right-0 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-t border-black/10 dark:border-white/10 px-4 pt-3 pb-4">
 
-        {/* Coordinates */}
-        <div className="flex gap-6 mb-2">
-          <CoordItem
-            label={t("latitude")}
-            raw={coords?.latitude ?? null}
-            dms={coords ? formatCoord(coords.latitude, "N", "S") : null}
-            loading={loading && !coords}
-          />
-          <CoordItem
-            label={t("longitude")}
-            raw={coords?.longitude ?? null}
-            dms={coords ? formatCoord(coords.longitude, "E", "W") : null}
-            loading={loading && !coords}
-          />
+        {/* Row 1: title + controls */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-orange-500" />
+            <span className="font-semibold tracking-wide text-sm">HERMES GPS</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setLocale(locale === "en" ? "pt" : "en")}
+              aria-label={t("toggleLocale")}
+              className="px-2 py-1 rounded-lg text-xs font-medium hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            >
+              {locale === "en" ? "PT" : "EN"}
+            </button>
+            <button
+              onClick={toggle}
+              aria-label={t("toggleTheme")}
+              className="p-1.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
-        {/* Status row */}
+        {/* Row 2: coordinates */}
+        {error ? (
+          <p className="text-xs text-red-600 dark:text-red-400 mb-2">{error}</p>
+        ) : (
+          <div className="flex gap-8 mb-2">
+            <CoordItem
+              label={t("latitude")}
+              raw={coords?.latitude ?? null}
+              dms={coords ? formatCoord(coords.latitude, "N", "S") : null}
+              loading={loading && !coords}
+            />
+            <CoordItem
+              label={t("longitude")}
+              raw={coords?.longitude ?? null}
+              dms={coords ? formatCoord(coords.longitude, "E", "W") : null}
+              loading={loading && !coords}
+            />
+          </div>
+        )}
+
+        {/* Row 3: status + refresh */}
         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-1.5">
             <Clock className="w-3 h-3" />
@@ -140,7 +139,7 @@ export default function GpsPage() {
             onClick={fetchCoords}
             disabled={loading}
             aria-label={t("refresh")}
-            className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline disabled:opacity-50"
+            className="flex items-center gap-1 text-orange-600 dark:text-orange-400 hover:underline disabled:opacity-50"
           >
             <RefreshCw className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
             {t("refresh")}
