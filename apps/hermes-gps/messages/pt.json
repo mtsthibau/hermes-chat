@@ -1,6 +1,7 @@
 {
   "gps": {
     "toggleTheme": "Alternar tema",
+    "toggleLocale": "Alternar idioma",
     "cardTitle": "Coordenadas Atuais da Estação",
     "latitude": "Latitude",
     "longitude": "Longitude",

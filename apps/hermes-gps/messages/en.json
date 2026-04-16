@@ -1,6 +1,7 @@
 {
   "gps": {
     "toggleTheme": "Toggle theme",
+    "toggleLocale": "Toggle language",
     "cardTitle": "Current Station Coordinates",
     "latitude": "Latitude",
     "longitude": "Longitude",

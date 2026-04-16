@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { MapPin, RefreshCw, Sun, Moon, ExternalLink, Clock } from "lucide-react";
 import { useTheme } from "@hermes/ui";
 import { useTranslations } from "next-intl";
+import { useLocale } from "@/providers/LocaleProvider";
 
 interface Coordinates {
   latitude: string;
@@ -27,6 +28,7 @@ function formatCoord(value: string, posLabel: string, negLabel: string): string 
 export default function GpsPage() {
   const { theme, toggle } = useTheme();
   const t = useTranslations("gps");
+  const { locale, setLocale } = useLocale();
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -87,13 +89,22 @@ export default function GpsPage() {
           <MapPin className="w-6 h-6 text-emerald-500" />
           <span className="text-lg font-semibold tracking-wide">HERMES GPS</span>
         </div>
-        <button
-          onClick={toggle}
-          aria-label={t("toggleTheme")}
-          className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-        >
-          {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setLocale(locale === "en" ? "pt" : "en")}
+            aria-label={t("toggleLocale")}
+            className="px-2 py-1 rounded-lg text-xs font-medium hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+          >
+            {locale === "en" ? "PT" : "EN"}
+          </button>
+          <button
+            onClick={toggle}
+            aria-label={t("toggleTheme")}
+            className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Card */}
