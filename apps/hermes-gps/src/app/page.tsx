@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { MapPin, RefreshCw, Sun, Moon, ExternalLink, Clock } from "lucide-react";
 import { useTheme } from "@hermes/ui";
+import { useTranslations } from "next-intl";
 
 interface Coordinates {
   latitude: string;
@@ -25,6 +26,7 @@ function formatCoord(value: string, posLabel: string, negLabel: string): string 
 
 export default function GpsPage() {
   const { theme, toggle } = useTheme();
+  const t = useTranslations("gps");
   const [coords, setCoords] = useState<Coordinates | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,7 +47,7 @@ export default function GpsPage() {
       setLastUpdated(new Date());
       setCountdown(REFRESH_INTERVAL_MS / 1000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      setError(err instanceof Error ? err.message : t("unknownError"));
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,7 @@ export default function GpsPage() {
         </div>
         <button
           onClick={toggle}
-          aria-label="Toggle theme"
+          aria-label={t("toggleTheme")}
           className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
         >
           {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -100,7 +102,7 @@ export default function GpsPage() {
         <div className="bg-emerald-600 dark:bg-emerald-700 px-6 py-4 flex items-center gap-3">
           <MapPin className="w-5 h-5 text-white" />
           <h1 className="text-white font-semibold text-base tracking-wide">
-            Current Station Coordinates
+            {t("cardTitle")}
           </h1>
         </div>
 
@@ -114,13 +116,13 @@ export default function GpsPage() {
 
           {/* Coordinate rows */}
           <CoordRow
-            label="Latitude"
+            label={t("latitude")}
             raw={lat}
             dms={lat ? formatCoord(lat, "N", "S") : null}
             loading={loading && !coords}
           />
           <CoordRow
-            label="Longitude"
+            label={t("longitude")}
             raw={lon}
             dms={lon ? formatCoord(lon, "E", "W") : null}
             loading={loading && !coords}
@@ -135,10 +137,10 @@ export default function GpsPage() {
               <Clock className="w-3.5 h-3.5" />
               {lastUpdated ? (
                 <span>
-                  Updated {lastUpdated.toLocaleTimeString()} · next in {countdown}s
+                  {t("updated", { time: lastUpdated.toLocaleTimeString(), countdown })}
                 </span>
               ) : (
-                <span>Fetching…</span>
+                <span>{t("fetching")}</span>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -150,17 +152,17 @@ export default function GpsPage() {
                   className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  Map
+                  {t("map")}
                 </a>
               )}
               <button
                 onClick={fetchCoords}
                 disabled={loading}
-                aria-label="Refresh"
+                aria-label={t("refresh")}
                 className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline disabled:opacity-50"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-                Refresh
+                {t("refresh")}
               </button>
             </div>
           </div>
@@ -168,7 +170,7 @@ export default function GpsPage() {
       </div>
 
       <p className="mt-8 text-xs text-gray-400 dark:text-gray-600">
-        Rhizomatica · HERMES Project
+        {t("footer")}
       </p>
     </main>
   );

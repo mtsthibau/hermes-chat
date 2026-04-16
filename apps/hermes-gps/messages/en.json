@@ -1,0 +1,19 @@
+{
+  "gps": {
+    "toggleTheme": "Toggle theme",
+    "cardTitle": "Current Station Coordinates",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "updated": "Updated {time} · next in {countdown}s",
+    "fetching": "Fetching…",
+    "map": "Map",
+    "refresh": "Refresh",
+    "footer": "Rhizomatica · HERMES Project",
+    "unknownError": "Unknown error"
+  },
+  "theme": {
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggle": "Toggle theme"
+  }
+}

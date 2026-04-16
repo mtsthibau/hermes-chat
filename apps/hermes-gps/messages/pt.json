@@ -1,0 +1,19 @@
+{
+  "gps": {
+    "toggleTheme": "Alternar tema",
+    "cardTitle": "Coordenadas Atuais da Estação",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "updated": "Atualizado {time} · próximo em {countdown}s",
+    "fetching": "Buscando…",
+    "map": "Mapa",
+    "refresh": "Atualizar",
+    "footer": "Rhizomatica · Projeto HERMES",
+    "unknownError": "Erro desconhecido"
+  },
+  "theme": {
+    "lightMode": "Modo claro",
+    "darkMode": "Modo escuro",
+    "toggle": "Alternar tema"
+  }
+}
