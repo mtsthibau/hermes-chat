@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { MapPin, RefreshCw, Sun, Moon, ExternalLink, Clock } from "lucide-react";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "@hermes/ui";
 
 interface Coordinates {
   latitude: string;

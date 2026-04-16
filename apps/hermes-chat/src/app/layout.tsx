@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@hermes/ui";
+import { LocaleProvider } from "@/providers/LocaleProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HERMES GPS",
-  description: "Hermes station geolocation – a Rhizomatica project",
+  title: "HERMES Chat",
+  description: "This is a Rhizomatica project",
 };
 
 export default function RootLayout({
@@ -33,7 +34,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <LocaleProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
