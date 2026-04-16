@@ -2,12 +2,10 @@
   "gps": {
     "toggleTheme": "Alternar tema",
     "toggleLocale": "Alternar idioma",
-    "cardTitle": "Coordenadas Atuais da Estação",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "updated": "Atualizado {time} · próximo em {countdown}s",
     "fetching": "Buscando…",
-    "map": "Mapa",
     "refresh": "Atualizar",
     "footer": "Rhizomatica · Projeto HERMES",
     "unknownError": "Erro desconhecido"
