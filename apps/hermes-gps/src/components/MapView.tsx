@@ -6,7 +6,7 @@ import { Protocol } from "pmtiles";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Geographic center of Brazil — MapLibre uses [longitude, latitude]
-const BRAZIL_CENTER: [number, number] = [-51.925, -14.235];
+const BRAZIL_CENTER: [number, number] = [-56.623855, -14.518694];
 const BRAZIL_ZOOM = 4;
 
 // PMTiles file must be placed at /public/brazil.pmtiles
