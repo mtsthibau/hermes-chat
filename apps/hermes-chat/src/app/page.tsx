@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "@hermes/ui";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/providers/LocaleProvider";
 

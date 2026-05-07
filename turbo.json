@@ -1,17 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
+<<<<<<< HEAD
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "dist/**", "!.next/cache/**"]
+=======
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"]
+>>>>>>> main
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
+<<<<<<< HEAD
     "lint": {},
     "test": {
       "outputs": ["coverage/**"]
+=======
+    "lint": {
+      "dependsOn": ["^lint"]
+>>>>>>> main
     }
   }
 }

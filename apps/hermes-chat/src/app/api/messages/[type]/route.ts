@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hermesGet } from '@/lib/hermesApi';
+import { hermesGet } from '@hermes/api';
 
 const ALLOWED_TYPES = new Set(['inbox', 'sent', 'draft']);
 

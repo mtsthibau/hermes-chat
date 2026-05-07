@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+<<<<<<< HEAD
 node_modules
+=======
+node_modules/
+>>>>>>> main
 /.pnp
 .pnp.*
 .yarn/*
@@ -15,7 +19,11 @@ coverage/
 
 # next.js
 .next/
+<<<<<<< HEAD
 out/
+=======
+/out/
+>>>>>>> main
 
 # production
 build/
@@ -23,6 +31,12 @@ dist/
 
 # turborepo
 .turbo/
+
+# turbo
+.turbo/
+
+# large tile archives — download separately
+*.pmtiles
 
 # misc
 .DS_Store
@@ -34,8 +48,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files – never commit secrets or local overrides
 .env
+.env.local
+.env.*.local
 
 # vercel
 .vercel
@@ -43,4 +59,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env.local
+
+# per-app node_modules and lock files
+# (monorepo installs from the root; nested installs are local only)
+apps/*/node_modules/
+apps/*/package-lock.json
+apps/*/yarn.lock
+apps/*/pnpm-lock.yaml

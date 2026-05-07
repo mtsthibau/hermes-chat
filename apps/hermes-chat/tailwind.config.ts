@@ -1,5 +1,9 @@
 import type { Config } from "tailwindcss";
+<<<<<<< HEAD
 import baseConfig from "../../packages/config/tailwind/base";
+=======
+import baseConfig from "@hermes/tailwind-config";
+>>>>>>> main
 
 export default {
   ...baseConfig,

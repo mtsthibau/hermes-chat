@@ -6,7 +6,11 @@ import { isSameDay } from "@platform/utils";
 import { useScrollPager } from "@/hooks/useScrollPager";
 import DateDivider from "./DateDivider";
 import MessageBubble from "./MessageBubble";
+<<<<<<< HEAD
 import { LoadingSpinner } from "@platform/ui";
+=======
+import { LoadingSpinner } from "@hermes/ui";
+>>>>>>> main
 
 interface MessageListProps {
     messages: Message[];

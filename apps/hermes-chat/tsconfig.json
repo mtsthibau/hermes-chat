@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "extends": "../../packages/config/typescript/base.json",
   "compilerOptions": {
     "noEmit": true,
@@ -8,6 +9,11 @@
         "name": "next"
       }
     ],
+=======
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }],
+>>>>>>> main
     "paths": {
       "@/*": ["./src/*"]
     }

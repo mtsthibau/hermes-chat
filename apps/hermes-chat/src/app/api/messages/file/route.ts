@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hermesPostMultipart } from '@/lib/hermesApi';
+import { hermesPostMultipart } from '@hermes/api';
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();

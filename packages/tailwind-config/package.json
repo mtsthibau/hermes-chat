@@ -1,0 +1,10 @@
+{
+  "name": "@hermes/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./base.ts",
+  "types": "./base.ts",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

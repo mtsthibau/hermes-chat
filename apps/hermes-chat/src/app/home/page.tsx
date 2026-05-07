@@ -8,9 +8,15 @@ import { useStationAlias } from "@/hooks/useStationAlias";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
 import NewChatFab from "@/components/NewChatFab";
+<<<<<<< HEAD
 import { SearchInput } from "@platform/ui";
 import ConversationItem from "@/components/home/ConversationItem";
 import { LoadingSpinner } from "@platform/ui";
+=======
+import { SearchInput } from "@hermes/ui";
+import ConversationItem from "@/components/home/ConversationItem";
+import { LoadingSpinner } from "@hermes/ui";
+>>>>>>> main
 
 export default function Home() {
   const user = useAuthGuard();

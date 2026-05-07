@@ -3,7 +3,11 @@ import type { Message } from "@platform/utils";
 import DeleteMessageButton from "@/components/DeleteMessageButton";
 import DoubleCheck from "@/components/DoubleCheck";
 import FileAttachment from "./FileAttachment";
+<<<<<<< HEAD
 import { PasswordDialog } from "@platform/ui";
+=======
+import { PasswordDialog } from "@hermes/ui";
+>>>>>>> main
 import { Lock, Loader2 } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";

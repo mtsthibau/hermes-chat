@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { hermesGetBuffer } from "@/lib/hermesApi";
+import { hermesGetBuffer } from "@hermes/api";
 
 export async function GET(
   req: NextRequest,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hermesPost } from '@/lib/hermesApi';
+import { hermesPost } from '@hermes/api';
 
 export async function POST(
   request: NextRequest,

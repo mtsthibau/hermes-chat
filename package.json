@@ -1,5 +1,10 @@
 {
+<<<<<<< HEAD
   "name": "hermes-platform",
+=======
+  "name": "hermes",
+  "version": "0.0.0",
+>>>>>>> main
   "private": true,
   "packageManager": "npm@11.9.0",
   "workspaces": [
@@ -7,6 +12,7 @@
     "packages/*"
   ],
   "scripts": {
+<<<<<<< HEAD
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
@@ -17,5 +23,15 @@
   },
   "engines": {
     "node": ">=20"
+=======
+    "dev:chat": "turbo run dev --filter=hermes-chat",
+    "dev:gps":  "turbo run dev --filter=hermes-gps",
+    "dev":      "turbo run dev",
+    "build":    "turbo run build",
+    "lint":     "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+>>>>>>> main
   }
 }

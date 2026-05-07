@@ -1,0 +1,19 @@
+# version control
+.git
+.gitignore
+
+# local env — never bake secrets into images
+.env*
+
+# dev dependencies and build outputs (installed fresh inside the image)
+node_modules
+.next
+.turbo
+
+# large tile archives — mounted as volumes at runtime instead
+*.pmtiles
+
+# editor / OS noise
+.DS_Store
+.vscode
+*.log
