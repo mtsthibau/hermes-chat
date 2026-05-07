@@ -1,0 +1,18 @@
+{
+  "gps": {
+    "toggleTheme": "Toggle theme",
+    "toggleLocale": "Toggle language",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "updated": "Updated {time} · next in {countdown}s",
+    "fetching": "Fetching…",
+    "refresh": "Refresh",
+    "footer": "Rhizomatica · HERMES Project",
+    "unknownError": "Unknown error"
+  },
+  "theme": {
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggle": "Toggle theme"
+  }
+}

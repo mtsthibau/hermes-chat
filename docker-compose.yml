@@ -1,0 +1,33 @@
+services:
+
+  hermes-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP: hermes-chat
+        PORT: "3000"
+    image: hermes-chat:latest
+    ports:
+      - "3000:3000"
+    environment:
+      HERMES_API_URL: ${HERMES_API_URL}
+    restart: unless-stopped
+
+  hermes-gps:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP: hermes-gps
+        PORT: "3001"
+    image: hermes-gps:latest
+    ports:
+      - "3001:3001"
+    environment:
+      HERMES_API_URL: ${HERMES_API_URL}
+    volumes:
+      # brazil.pmtiles is too large to bake into the image — mount from the host.
+      # Run  npm run download-tiles  inside apps/hermes-gps/ first.
+      - ./apps/hermes-gps/public/brazil.pmtiles:/app/apps/hermes-gps/public/brazil.pmtiles:ro
+    restart: unless-stopped
